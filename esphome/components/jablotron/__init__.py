@@ -4,6 +4,7 @@ from esphome import pins
 from esphome.components import uart
 from esphome.const import CONF_ID
 
+CODEOWNERS = ["@juliekoubova"]
 DEPENDENCIES = ["uart"]
 
 CONF_FLOW_CONTROL_PIN = "flow_control_pin"
