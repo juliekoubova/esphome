@@ -50,6 +50,7 @@ bool ResponseHandlerState::invoke(StringView response) const {
   for (auto device : this->devices_) {
     if (device->get_index() == index) {
       device->set_state(response);
+      return true;
     }
   }
   return true;
