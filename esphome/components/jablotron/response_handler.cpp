@@ -6,25 +6,25 @@ namespace esphome {
 namespace jablotron {
 
 bool ResponseHandler::is_last_response() const { return this->is_last_response_; }
-void ResponseHandler::set_is_last_response(bool value) { this->is_last_response_ = value; }
+void ResponseHandler::set_is_last_response_(bool value) { this->is_last_response_ = value; }
 
-ResponseHandlerError::ResponseHandlerError() { this->set_is_last_response(true); }
+ResponseHandlerError::ResponseHandlerError() { this->set_is_last_response_(true); }
 bool ResponseHandlerError::invoke(StringView response) const {
   return starts_with(response, "ERROR: ") || response == "ERROR";
 }
 
-ResponseHandlerOK::ResponseHandlerOK() { this->set_is_last_response(true); }
+ResponseHandlerOK::ResponseHandlerOK() { this->set_is_last_response_(true); }
 bool ResponseHandlerOK::invoke(StringView response) const { return response == "OK"; }
 
 ResponseHandlerPrfState::ResponseHandlerPrfState(const PeripheralDeviceVector &devices) : devices_{devices} {
-  this->set_is_last_response(true);
+  this->set_is_last_response_(true);
 }
 
 bool ResponseHandlerPrfState::invoke(StringView response) const {
   if (!try_remove_prefix(response, "PRFSTATE ")) {
     return false;
   }
-  for (auto device : this->devices_) {
+  for (auto *device : this->devices_) {
     auto state = get_bit_in_hex_string(response, device->get_index());
     device->set_state(state);
   }
@@ -32,7 +32,7 @@ bool ResponseHandlerPrfState::invoke(StringView response) const {
 }
 
 ResponseHandlerState::ResponseHandlerState(const SectionDeviceVector &devices) : devices_{devices} {
-  this->set_is_last_response(false);
+  this->set_is_last_response_(false);
 }
 
 bool ResponseHandlerState::invoke(StringView response) const {
@@ -47,7 +47,7 @@ bool ResponseHandlerState::invoke(StringView response) const {
     ESP_LOGE("jablotron", "ResponseHandlerState: STATE has no index: '%s'", response.data());
     return true;
   }
-  for (auto device : this->devices_) {
+  for (auto *device : this->devices_) {
     if (device->get_index() == index) {
       device->set_state(response);
       return true;
@@ -57,21 +57,21 @@ bool ResponseHandlerState::invoke(StringView response) const {
 }
 
 ResponseHandlerVer::ResponseHandlerVer(const InfoDeviceVector &devices) : devices_{devices} {
-  this->set_is_last_response(true);
+  this->set_is_last_response_(true);
 }
 
 bool ResponseHandlerVer::invoke(StringView response) const {
   if (!response.starts_with("JA-121T,")) {
     return false;
   }
-  for (auto device : this->devices_) {
+  for (auto *device : this->devices_) {
     device->set_state(response);
   }
   return true;
 }
 
 ResponseHandlerSectionFlag::ResponseHandlerSectionFlag(const SectionFlagDeviceVector &devices) : devices_{devices} {
-  this->set_is_last_response(false);
+  this->set_is_last_response_(false);
 }
 
 bool ResponseHandlerSectionFlag::invoke(StringView response) const {
@@ -110,7 +110,7 @@ bool ResponseHandlerSectionFlag::invoke(StringView response) const {
     return false;
   }
 
-  for (auto device : this->devices_) {
+  for (auto *device : this->devices_) {
     if (device->get_index() == index && device->get_flag() == flag) {
       device->set_state(state);
       return true;

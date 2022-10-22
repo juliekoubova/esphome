@@ -21,10 +21,10 @@ class JablotronComponent : public UARTLineDevice<260>, public PollingComponent {
   void loop() override;
   void update() override;
 
-  void register_info(InfoDevice *);
-  void register_peripheral(PeripheralDevice *);
-  void register_section(SectionDevice *);
-  void register_section_flag(SectionFlagDevice *);
+  void register_info(InfoDevice *device);
+  void register_peripheral(PeripheralDevice *device);
+  void register_section(SectionDevice *device);
+  void register_section_flag(SectionFlagDevice *device);
 
  private:
   ResponseHandler *handle_response_(StringView response);
@@ -33,7 +33,7 @@ class JablotronComponent : public UARTLineDevice<260>, public PollingComponent {
   void queue_section_request_();
   void queue_request_(std::string request);
   void send_queued_request_();
-  void send_request_(std::string request);
+  void send_request_(const std::string &request);
 
   InfoDeviceVector infos_;
   PeripheralDeviceVector peripherals_;

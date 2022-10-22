@@ -14,5 +14,5 @@ class SectionFlagSensor : public binary_sensor::BinarySensor, public jablotron::
   int last_value_ = -1;
 };
 
-}  // namespace jablotron
+}  // namespace jablotron_section_flag
 }  // namespace esphome

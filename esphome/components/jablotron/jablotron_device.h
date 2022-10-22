@@ -38,8 +38,8 @@ enum class SectionFlag {
 class SectionFlagDevice : public IndexedDevice<bool> {
  public:
   SectionFlag get_flag() const;
-  void set_flag(SectionFlag flag);
-  void set_flag(int flag);
+  void set_flag(SectionFlag value);
+  void set_flag(int value);
 
  private:
   SectionFlag flag_ = SectionFlag::NONE;

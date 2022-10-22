@@ -33,7 +33,7 @@ class StringView {
     }
   }
 
-  StringView substr(size_type pos = 0, size_type count = npos) const {
+  StringView substr(size_type pos = 0, size_type count = NPOS) const {
     if (pos > this->size_) {
       throw std::out_of_range("pos out of range");
     }
@@ -49,7 +49,7 @@ class StringView {
 
   bool operator!=(const StringView &other) const noexcept { return !(*this == other); }
 
-  static constexpr size_type npos = std::numeric_limits<size_t>::max();
+  static constexpr size_type NPOS = std::numeric_limits<size_t>::max();
 
  private:
   const char *data_;

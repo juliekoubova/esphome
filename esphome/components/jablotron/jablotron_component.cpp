@@ -22,10 +22,10 @@ void JablotronComponent::setup() {
 void JablotronComponent::update() { this->pending_update_ = true; }
 
 void JablotronComponent::loop() {
-  auto line = this->read_line();
+  auto *line = this->read_line();
   if (line != nullptr) {
     ESP_LOGD(TAG, "Received line: '%s'", line);
-    auto handler = this->handle_response_(line);
+    auto *handler = this->handle_response_(line);
     if (handler == nullptr) {
       ESP_LOGE(TAG, "Unknown message: '%s'", line);
     } else if (handler->is_last_response()) {
@@ -47,7 +47,7 @@ void JablotronComponent::queue_peripheral_request_() {
 void JablotronComponent::queue_section_request_() {
   if (!this->sections_.empty()) {
     std::stringstream indices;
-    for (const auto section : sections_) {
+    for (auto *const section : sections_) {
       indices << ' ';
       indices << section->get_index();
     }
@@ -75,7 +75,7 @@ void JablotronComponent::queue_request_(std::string request) {
   this->request_queue_.emplace_back(std::move(request));
 }
 
-void JablotronComponent::send_request_(std::string request) {
+void JablotronComponent::send_request_(const std::string &request) {
   ESP_LOGD(TAG, "Sending request '%s'", request.c_str());
   this->write_line(request);
 }

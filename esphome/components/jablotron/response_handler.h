@@ -13,7 +13,7 @@ class ResponseHandler {
   bool is_last_response() const;
 
  protected:
-  void set_is_last_response(bool value);
+  void set_is_last_response_(bool value);
 
  private:
   bool is_last_response_ = false;
@@ -51,8 +51,8 @@ class ResponseHandlerState final : public ResponseHandler {
 
 class ResponseHandlerVer final : public ResponseHandler {
  public:
-  ResponseHandlerVer(const InfoDeviceVector &);
-  bool invoke(StringView) const final;
+  ResponseHandlerVer(const InfoDeviceVector &devices);
+  bool invoke(StringView response) const final;
 
  private:
   const InfoDeviceVector &devices_;
@@ -60,8 +60,8 @@ class ResponseHandlerVer final : public ResponseHandler {
 
 class ResponseHandlerSectionFlag final : public ResponseHandler {
  public:
-  ResponseHandlerSectionFlag(const SectionFlagDeviceVector &);
-  bool invoke(StringView) const final;
+  ResponseHandlerSectionFlag(const SectionFlagDeviceVector &devices);
+  bool invoke(StringView response) const final;
 
  private:
   const SectionFlagDeviceVector &devices_;
