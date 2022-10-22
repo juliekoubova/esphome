@@ -12,7 +12,7 @@ template<typename T = StringView> class JablotronDevice {
  public:
   virtual ~JablotronDevice() = default;
   virtual void set_parent_jablotron(JablotronComponent *parent) = 0;
-  virtual void set_state(T) = 0;
+  virtual void set_state(T value) = 0;
 };
 
 template<typename T = StringView> class IndexedDevice : public JablotronDevice<T> {

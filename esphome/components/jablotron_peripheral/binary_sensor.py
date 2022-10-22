@@ -1,14 +1,16 @@
 import esphome.codegen as cg
 from esphome.components import binary_sensor
-from ..jablotron import (
+from esphome.components.jablotron import (
     CONF_INDEX,
     INDEX_SCHEMA,
     JABLOTRON_DEVICE_SCHEMA,
-    jablotron_ns,
     register_jablotron_device,
 )
 
-PeripheralSensor = jablotron_ns.class_("PeripheralSensor", binary_sensor.BinarySensor)
+jablotron_peripheral_ns = cg.esphome_ns.namespace("jablotron_peripheral")
+PeripheralSensor = jablotron_peripheral_ns.class_(
+    "PeripheralSensor", binary_sensor.BinarySensor
+)
 
 DEPENDENCIES = ["jablotron"]
 CONFIG_SCHEMA = (

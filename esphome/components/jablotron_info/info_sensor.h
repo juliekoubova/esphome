@@ -3,13 +3,13 @@
 #include "../jablotron/jablotron_device.h"
 
 namespace esphome {
-namespace jablotron {
+namespace jablotron_info {
 
-class InfoSensor : public text_sensor::TextSensor, public InfoDevice {
+class InfoSensor : public text_sensor::TextSensor, public jablotron::InfoDevice {
  public:
-  void set_state(StringView) override;
-  void set_parent_jablotron(JablotronComponent *) override;
+  void set_state(jablotron::StringView) override;
+  void set_parent_jablotron(jablotron::JablotronComponent *) override;
 };
 
-}  // namespace jablotron
+}  // namespace jablotron_info
 }  // namespace esphome

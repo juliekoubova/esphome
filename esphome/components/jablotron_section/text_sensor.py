@@ -1,15 +1,15 @@
 import esphome.codegen as cg
 from esphome.components import text_sensor
 from esphome.const import CONF_ID
-from ..jablotron import (
+from esphome.components.jablotron import (
     CONF_INDEX,
     INDEX_SCHEMA,
     JABLOTRON_DEVICE_SCHEMA,
-    jablotron_ns,
     register_jablotron_device,
 )
 
-SectionSensor = jablotron_ns.class_("SectionSensor", text_sensor.TextSensor)
+jablotron_section_ns = cg.esphome_ns.namespace("jablotron_section")
+SectionSensor = jablotron_section_ns.class_("SectionSensor", text_sensor.TextSensor)
 
 DEPENDENCIES = ["jablotron"]
 CONFIG_SCHEMA = (

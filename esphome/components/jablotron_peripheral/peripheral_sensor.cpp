@@ -2,7 +2,9 @@
 #include "../jablotron/jablotron_component.h"
 
 namespace esphome {
-namespace jablotron {
+namespace jablotron_peripheral {
+
+using namespace jablotron;
 
 void PeripheralSensor::set_parent_jablotron(JablotronComponent *parent) { parent->register_peripheral(this); }
 
@@ -13,5 +15,5 @@ void PeripheralSensor::set_state(bool value) {
   }
 }
 
-}  // namespace jablotron
+}  // namespace jablotron_peripheral
 }  // namespace esphome

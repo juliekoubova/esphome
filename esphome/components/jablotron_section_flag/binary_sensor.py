@@ -1,15 +1,17 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import binary_sensor
-from ..jablotron import (
+from esphome.components.jablotron import (
     CONF_INDEX,
     INDEX_SCHEMA,
     JABLOTRON_DEVICE_SCHEMA,
-    jablotron_ns,
     register_jablotron_device,
 )
 
-SectionFlagSensor = jablotron_ns.class_("SectionFlagSensor", binary_sensor.BinarySensor)
+jablotron_section_flag_ns = cg.esphome_ns.namespace("jablotron_section_flag")
+SectionFlagSensor = jablotron_section_flag_ns.class_(
+    "SectionFlagSensor", binary_sensor.BinarySensor
+)
 
 CONF_FLAG = "flag"
 SECTION_FLAGS = {

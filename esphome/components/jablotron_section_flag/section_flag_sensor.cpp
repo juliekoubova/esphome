@@ -2,9 +2,11 @@
 #include "../jablotron/jablotron_component.h"
 
 namespace esphome {
-namespace jablotron {
+namespace jablotron_section_flag {
 
-void SectionFlagSensor::set_parent_jablotron(JablotronComponent *parent) { parent->register_section_flag(this); }
+void SectionFlagSensor::set_parent_jablotron(jablotron::JablotronComponent *parent) {
+  parent->register_section_flag(this);
+}
 
 void SectionFlagSensor::set_state(bool value) {
   if (this->last_value_ != value) {
@@ -13,5 +15,5 @@ void SectionFlagSensor::set_state(bool value) {
   }
 }
 
-}  // namespace jablotron
+}  // namespace jablotron_section_flag
 }  // namespace esphome

@@ -4,7 +4,9 @@
 #include "../jablotron/jablotron_component.h"
 
 namespace esphome {
-namespace jablotron {
+namespace jablotron_section {
+
+using namespace jablotron;
 
 static const char *const TAG = "jablotron_section";
 
@@ -17,5 +19,5 @@ void SectionSensor::set_state(StringView response) {
 
 void SectionSensor::set_parent_jablotron(JablotronComponent *parent) { parent->register_section(this); }
 
-}  // namespace jablotron
+}  // namespace jablotron_section
 }  // namespace esphome

@@ -1,10 +1,15 @@
 import esphome.codegen as cg
 from esphome.components import text_sensor
 from esphome.const import CONF_ID, ENTITY_CATEGORY_DIAGNOSTIC
-from ..jablotron import jablotron_ns, register_jablotron_device, JABLOTRON_DEVICE_SCHEMA
+from esphome.components.jablotron import (
+    register_jablotron_device,
+    JABLOTRON_DEVICE_SCHEMA,
+)
 
 DEPENDENCIES = ["jablotron"]
-InfoSensor = jablotron_ns.class_("InfoSensor", text_sensor.TextSensor)
+
+jablotron_info_ns = cg.esphome_ns.namespace("jablotron_info")
+InfoSensor = jablotron_info_ns.class_("InfoSensor", text_sensor.TextSensor)
 
 CONFIG_SCHEMA = text_sensor.text_sensor_schema(
     InfoSensor, entity_category=ENTITY_CATEGORY_DIAGNOSTIC

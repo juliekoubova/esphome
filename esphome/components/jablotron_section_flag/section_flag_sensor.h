@@ -3,11 +3,11 @@
 #include "../jablotron/jablotron_device.h"
 
 namespace esphome {
-namespace jablotron {
+namespace jablotron_section_flag {
 
-class SectionFlagSensor : public binary_sensor::BinarySensor, public SectionFlagDevice {
+class SectionFlagSensor : public binary_sensor::BinarySensor, public jablotron::SectionFlagDevice {
  public:
-  void set_parent_jablotron(JablotronComponent *parent) override;
+  void set_parent_jablotron(jablotron::JablotronComponent *parent) override;
   void set_state(bool value) override;
 
  private:

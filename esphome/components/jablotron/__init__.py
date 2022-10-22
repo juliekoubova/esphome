@@ -2,14 +2,12 @@ import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome import pins
 from esphome.components import uart
-from esphome.const import CONF_ID, CONF_FLOW_CONTROL_PIN
+from esphome.const import CONF_FLOW_CONTROL_PIN, CONF_ID, CONF_INDEX
 
 CODEOWNERS = ["@juliekoubova"]
 DEPENDENCIES = ["uart"]
 
 CONF_JABLOTRON_ID = "jablotron_id"
-CONF_INDEX = "index"
-
 jablotron_ns = cg.esphome_ns.namespace("jablotron")
 JablotronComponent = jablotron_ns.class_(
     "JablotronComponent", cg.PollingComponent, uart.UARTDevice

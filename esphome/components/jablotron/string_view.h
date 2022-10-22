@@ -18,7 +18,7 @@ class StringView {
 
   const char *data() const noexcept { return this->data_; }
   bool empty() const noexcept { return this->size_ == 0; }
-  size_t size() const noexcept { return this->size_; }
+  size_type size() const noexcept { return this->size_; }
   operator std::string() const { return std::string{this->data_, this->size_}; }
 
   size_type starts_with(StringView s) const { return this->substr(0, s.size()) == s; }
