@@ -9,18 +9,18 @@ bool ResponseHandler::is_last_response() const { return this->is_last_response_;
 void ResponseHandler::set_is_last_response(bool value) { this->is_last_response_ = value; }
 
 ResponseHandlerError::ResponseHandlerError() { this->set_is_last_response(true); }
-bool ResponseHandlerError::invoke(std::string_view response) const {
+bool ResponseHandlerError::invoke(StringView response) const {
   return starts_with(response, "ERROR: ") || response == "ERROR";
 }
 
 ResponseHandlerOK::ResponseHandlerOK() { this->set_is_last_response(true); }
-bool ResponseHandlerOK::invoke(std::string_view response) const { return response == "OK"; }
+bool ResponseHandlerOK::invoke(StringView response) const { return response == "OK"; }
 
 ResponseHandlerPrfState::ResponseHandlerPrfState(const PeripheralDeviceVector &devices) : devices_{devices} {
   this->set_is_last_response(true);
 }
 
-bool ResponseHandlerPrfState::invoke(std::string_view response) const {
+bool ResponseHandlerPrfState::invoke(StringView response) const {
   if (!try_remove_prefix(response, "PRFSTATE ")) {
     return false;
   }
@@ -35,7 +35,7 @@ ResponseHandlerState::ResponseHandlerState(const SectionDeviceVector &devices) :
   this->set_is_last_response(false);
 }
 
-bool ResponseHandlerState::invoke(std::string_view response) const {
+bool ResponseHandlerState::invoke(StringView response) const {
   if (response == "STATE:") {
     return true;
   }
@@ -59,8 +59,8 @@ ResponseHandlerVer::ResponseHandlerVer(const InfoDeviceVector &devices) : device
   this->set_is_last_response(true);
 }
 
-bool ResponseHandlerVer::invoke(std::string_view response) const {
-  if (response.find(", SN:") == std::string_view::npos) {
+bool ResponseHandlerVer::invoke(StringView response) const {
+  if (!response.starts_with("JA-121T,")) {
     return false;
   }
   for (auto device : this->devices_) {
@@ -73,7 +73,7 @@ ResponseHandlerSectionFlag::ResponseHandlerSectionFlag(const SectionFlagDeviceVe
   this->set_is_last_response(false);
 }
 
-bool ResponseHandlerSectionFlag::invoke(std::string_view response) const {
+bool ResponseHandlerSectionFlag::invoke(StringView response) const {
   SectionFlag flag = SectionFlag::NONE;
   if (try_remove_prefix(response, "EXTERNAL_WARNING ")) {
     flag = SectionFlag::EXTERNAL_WARNING;

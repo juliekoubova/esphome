@@ -1,14 +1,14 @@
 #pragma once
 #include <deque>
-#include <string_view>
-#include <unordered_set>
 #include <vector>
+#include <string>
 #include "esphome/core/component.h"
 #include "esphome/components/uart/uart.h"
 #include "jablotron_device.h"
 #include "response_awaiter.h"
 #include "response_handler.h"
 #include "uart_line_device.h"
+#include "string_view.h"
 
 namespace esphome {
 namespace jablotron {
@@ -27,15 +27,14 @@ class JablotronComponent : public UARTLineDevice<260>, public PollingComponent {
   void register_section_flag(SectionFlagDevice *);
 
  private:
-  ResponseHandler *handle_response(std::string_view response);
+  ResponseHandler *handle_response_(StringView response);
 
-  void queue_peripheral_request();
-  void queue_section_request();
-  void queue_request(std::string request);
-  void send_queued_request();
-  void send_request(std::string request);
+  void queue_peripheral_request_();
+  void queue_section_request_();
+  void queue_request_(std::string request);
+  void send_queued_request_();
+  void send_request_(std::string request);
 
- private:
   InfoDeviceVector infos_;
   PeripheralDeviceVector peripherals_;
   SectionDeviceVector sections_;
@@ -43,7 +42,7 @@ class JablotronComponent : public UARTLineDevice<260>, public PollingComponent {
   std::deque<std::string> request_queue_;
 
   ResponseAwaiter response_awaiter_;
-  bool pending_update_ = 0;
+  bool pending_update_ = false;
 
   ResponseHandlerError error_handler_;
   ResponseHandlerOK ok_handler_;

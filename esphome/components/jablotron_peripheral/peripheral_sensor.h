@@ -1,5 +1,4 @@
 #pragma once
-#include <string_view>
 #include "esphome/components/binary_sensor/binary_sensor.h"
 #include "../jablotron/jablotron_device.h"
 

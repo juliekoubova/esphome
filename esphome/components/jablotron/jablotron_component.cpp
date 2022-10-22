@@ -1,5 +1,6 @@
 #include "jablotron_component.h"
 #include "response_handler.h"
+#include <sstream>
 
 namespace esphome {
 namespace jablotron {
@@ -15,7 +16,7 @@ JablotronComponent::JablotronComponent()
 
 void JablotronComponent::setup() {
   UARTLineDevice::setup();
-  this->queue_request("VER");
+  this->queue_request_("VER");
 }
 
 void JablotronComponent::update() { this->pending_update_ = true; }
@@ -24,7 +25,7 @@ void JablotronComponent::loop() {
   auto line = this->read_line();
   if (line != nullptr) {
     ESP_LOGD(TAG, "Received line: '%s'", line);
-    auto handler = this->handle_response(line);
+    auto handler = this->handle_response_(line);
     if (handler == nullptr) {
       ESP_LOGE(TAG, "Unknown message: '%s'", line);
     } else if (handler->is_last_response()) {
@@ -33,49 +34,48 @@ void JablotronComponent::loop() {
   }
 
   if (!this->available() && this->line_buffer_empty() && !this->response_awaiter_.is_waiting_for_response()) {
-    this->send_queued_request();
+    this->send_queued_request_();
   }
 }
 
-void JablotronComponent::queue_peripheral_request() {
+void JablotronComponent::queue_peripheral_request_() {
   if (!this->peripherals_.empty()) {
-    this->queue_request("PRFSTATE");
+    this->queue_request_("PRFSTATE");
   }
 }
 
-void JablotronComponent::queue_section_request() {
+void JablotronComponent::queue_section_request_() {
   if (!this->sections_.empty()) {
-    std::string indices;
-    indices.reserve(2 * this->sections_.size());
+    std::stringstream indices;
     for (const auto section : sections_) {
-      indices += ' ';
-      indices += std::to_string(section->get_index());
+      indices << ' ';
+      indices << section->get_index();
     }
-    this->queue_request("STATE" + indices);
-    this->queue_request("FLAGS" + indices);
+    this->queue_request_("STATE" + indices.str());
+    this->queue_request_("FLAGS" + indices.str());
   }
 }
 
-void JablotronComponent::send_queued_request() {
+void JablotronComponent::send_queued_request_() {
   if (this->request_queue_.empty() && this->pending_update_) {
-    this->queue_peripheral_request();
-    this->queue_section_request();
+    this->queue_peripheral_request_();
+    this->queue_section_request_();
     this->pending_update_ = false;
   }
   if (!this->request_queue_.empty()) {
     auto request = std::move(this->request_queue_.front());
     this->request_queue_.pop_front();
-    this->send_request(std::move(request));
+    this->send_request_(std::move(request));
     this->response_awaiter_.request_sent();
   }
 }
 
-void JablotronComponent::queue_request(std::string request) {
+void JablotronComponent::queue_request_(std::string request) {
   ESP_LOGD(TAG, "Queueing request '%s'", request.c_str());
-  this->request_queue_.push_back(std::move(request));
+  this->request_queue_.emplace_back(std::move(request));
 }
 
-void JablotronComponent::send_request(std::string request) {
+void JablotronComponent::send_request_(std::string request) {
   ESP_LOGD(TAG, "Sending request '%s'", request.c_str());
   this->write_line(request);
 }
@@ -100,7 +100,7 @@ void JablotronComponent::register_info(InfoDevice *device) {
   this->infos_.push_back(device);
 }
 
-ResponseHandler *JablotronComponent::handle_response(std::string_view response) {
+ResponseHandler *JablotronComponent::handle_response_(StringView response) {
   if (prfstate_handler_.invoke(response)) {
     return &prfstate_handler_;
   } else if (state_handler_.invoke(response)) {

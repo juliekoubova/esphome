@@ -1,21 +1,21 @@
 #pragma once
 #include <string>
-#include <string_view>
 #include <vector>
+#include "string_view.h"
 
 namespace esphome {
 namespace jablotron {
 
 class JablotronComponent;
 
-template<typename T = std::string_view> class JablotronDevice {
+template<typename T = StringView> class JablotronDevice {
  public:
   virtual ~JablotronDevice() = default;
   virtual void set_parent_jablotron(JablotronComponent *parent) = 0;
   virtual void set_state(T) = 0;
 };
 
-template<typename T = std::string_view> class IndexedDevice : public JablotronDevice<T> {
+template<typename T = StringView> class IndexedDevice : public JablotronDevice<T> {
  public:
   int get_index() const { return this->index_; }
   void set_index(int value) { this->index_ = value; }
@@ -38,8 +38,8 @@ enum class SectionFlag {
 class SectionFlagDevice : public IndexedDevice<bool> {
  public:
   SectionFlag get_flag() const;
-  void set_flag(SectionFlag);
-  void set_flag(int);
+  void set_flag(SectionFlag flag);
+  void set_flag(int flag);
 
  private:
   SectionFlag flag_ = SectionFlag::NONE;
@@ -48,10 +48,10 @@ class SectionFlagDevice : public IndexedDevice<bool> {
 using PeripheralDevice = IndexedDevice<bool>;
 using PeripheralDeviceVector = std::vector<PeripheralDevice *>;
 
-using SectionDevice = IndexedDevice<>;
+using SectionDevice = IndexedDevice<StringView>;
 using SectionDeviceVector = std::vector<SectionDevice *>;
 
-using InfoDevice = JablotronDevice<>;
+using InfoDevice = JablotronDevice<StringView>;
 using InfoDeviceVector = std::vector<InfoDevice *>;
 
 using SectionFlagDeviceVector = std::vector<SectionFlagDevice *>;

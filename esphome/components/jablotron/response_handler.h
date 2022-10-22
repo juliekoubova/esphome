@@ -1,5 +1,4 @@
 #pragma once
-#include <string_view>
 #include "jablotron_device.h"
 
 namespace esphome {
@@ -8,7 +7,7 @@ namespace jablotron {
 class ResponseHandler {
  public:
   virtual ~ResponseHandler() = default;
-  virtual bool invoke(std::string_view) const = 0;
+  virtual bool invoke(StringView) const = 0;
 
  public:
   bool is_last_response() const;
@@ -23,19 +22,19 @@ class ResponseHandler {
 class ResponseHandlerError : public ResponseHandler {
  public:
   ResponseHandlerError();
-  bool invoke(std::string_view) const final;
+  bool invoke(StringView) const final;
 };
 
 class ResponseHandlerOK : public ResponseHandler {
  public:
   ResponseHandlerOK();
-  bool invoke(std::string_view) const final;
+  bool invoke(StringView) const final;
 };
 
 class ResponseHandlerPrfState final : public ResponseHandler {
  public:
   ResponseHandlerPrfState(const PeripheralDeviceVector &);
-  bool invoke(std::string_view) const final;
+  bool invoke(StringView) const final;
 
  private:
   const PeripheralDeviceVector &devices_;
@@ -44,7 +43,7 @@ class ResponseHandlerPrfState final : public ResponseHandler {
 class ResponseHandlerState final : public ResponseHandler {
  public:
   ResponseHandlerState(const SectionDeviceVector &);
-  bool invoke(std::string_view) const final;
+  bool invoke(StringView) const final;
 
  private:
   const SectionDeviceVector &devices_;
@@ -53,7 +52,7 @@ class ResponseHandlerState final : public ResponseHandler {
 class ResponseHandlerVer final : public ResponseHandler {
  public:
   ResponseHandlerVer(const InfoDeviceVector &);
-  bool invoke(std::string_view) const final;
+  bool invoke(StringView) const final;
 
  private:
   const InfoDeviceVector &devices_;
@@ -62,7 +61,7 @@ class ResponseHandlerVer final : public ResponseHandler {
 class ResponseHandlerSectionFlag final : public ResponseHandler {
  public:
   ResponseHandlerSectionFlag(const SectionFlagDeviceVector &);
-  bool invoke(std::string_view) const final;
+  bool invoke(StringView) const final;
 
  private:
   const SectionFlagDeviceVector &devices_;

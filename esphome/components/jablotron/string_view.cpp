@@ -1,5 +1,7 @@
 #include "string_view.h"
 #include "esphome/core/log.h"
+#include <cstring>
+#include <cstdlib>
 
 namespace esphome {
 namespace jablotron {
@@ -23,7 +25,14 @@ uint8_t parse_hex_byte(char high, char low) { return (parse_hex_nibble(high) << 
 
 }  // namespace
 
-bool get_bit_in_hex_string(std::string_view str, size_t index) {
+StringView::StringView() : data_{nullptr}, size_{0} {}
+StringView::StringView(const char *begin) : data_{begin}, size_{std::strlen(begin)} {}
+
+StringView::StringView(const char *begin, size_t size) : data_{begin}, size_{size} {}
+
+StringView::StringView(const std::string &str) : data_{str.data()}, size_{str.size()} {}
+
+bool get_bit_in_hex_string(StringView str, size_t index) {
   if (index >= str.size()) {
     ESP_LOGE(TAG, "get_bit_in_hex_string: index=%zu out of string bounds", index);
     return false;
@@ -44,14 +53,14 @@ bool get_bit_in_hex_string(std::string_view str, size_t index) {
   return byte & bit_mask;
 }
 
-bool starts_with(std::string_view str, std::string_view prefix) {
+bool starts_with(StringView str, StringView prefix) {
   if (prefix.empty()) {
     return false;
   }
   return str.substr(0, prefix.size()) == prefix;
 }
 
-bool try_remove_prefix(std::string_view &str, std::string_view prefix) {
+bool try_remove_prefix(StringView &str, StringView prefix) {
   if (starts_with(str, prefix)) {
     str.remove_prefix(prefix.size());
     return true;
@@ -59,15 +68,13 @@ bool try_remove_prefix(std::string_view &str, std::string_view prefix) {
   return false;
 }
 
-bool try_remove_prefix(std::string_view &str, std::string prefix) {
-  return try_remove_prefix(str, std::string_view{prefix});
+bool try_remove_prefix(StringView &str, const std::string &prefix) {
+  return try_remove_prefix(str, StringView{prefix});
 }
 
-bool try_remove_prefix(std::string_view &str, const char *prefix) {
-  return try_remove_prefix(str, std::string_view{prefix});
-}
+bool try_remove_prefix(StringView &str, const char *prefix) { return try_remove_prefix(str, StringView{prefix}); }
 
-bool try_remove_prefix_and_space(std::string_view &str, std::string_view prefix) {
+bool try_remove_prefix_and_space(StringView &str, StringView prefix) {
   if (starts_with(str, prefix) && str[prefix.size()] == ' ') {
     str.remove_prefix(prefix.size() + 1);
     return true;
@@ -75,22 +82,22 @@ bool try_remove_prefix_and_space(std::string_view &str, std::string_view prefix)
   return false;
 }
 
-bool try_remove_prefix_and_space(std::string_view &str, std::string prefix) {
-  return try_remove_prefix_and_space(str, std::string_view{prefix});
+bool try_remove_prefix_and_space(StringView &str, const std::string &prefix) {
+  return try_remove_prefix_and_space(str, StringView{prefix});
 }
 
-bool try_remove_prefix_and_space(std::string_view &str, const char *prefix) {
-  return try_remove_prefix_and_space(str, std::string_view{prefix});
+bool try_remove_prefix_and_space(StringView &str, const char *prefix) {
+  return try_remove_prefix_and_space(str, StringView{prefix});
 }
 
-bool try_remove_integer_and_space(std::string_view &str, int &result) {
+bool try_remove_integer_and_space(StringView &str, int &result) {
   const char *begin = str.data();
   char *integer_end = nullptr;
   result = static_cast<int>(std::strtol(begin, &integer_end, 10));
   if (integer_end == begin || *integer_end != ' ') {
     return false;
   }
-  str = std::string_view{integer_end + 1};
+  str = StringView{integer_end + 1};
   return true;
 }
 

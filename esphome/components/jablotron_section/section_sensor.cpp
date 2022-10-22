@@ -8,7 +8,7 @@ namespace jablotron {
 
 static const char *const TAG = "jablotron_section";
 
-void SectionSensor::set_state(std::string_view response) {
+void SectionSensor::set_state(StringView response) {
   if (response != this->last_value_) {
     this->last_value_ = std::string{response};
     this->publish_state(this->last_value_);
