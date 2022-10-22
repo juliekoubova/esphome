@@ -44,7 +44,7 @@ class StringView {
   const char &operator[](size_type index) const { return this->data_[index]; }
 
   bool operator==(const StringView &other) const noexcept {
-    return this->size_ == other.size_ && (this->size_ == 0 || std::strncmp(this->data_, other.data_, this->size_));
+    return this->size_ == other.size_ && (this->size_ == 0 || std::strncmp(this->data_, other.data_, this->size_) == 0);
   }
 
   bool operator!=(const StringView &other) const noexcept { return !(*this == other); }

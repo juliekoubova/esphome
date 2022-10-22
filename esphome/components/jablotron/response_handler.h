@@ -1,5 +1,6 @@
 #pragma once
 #include "jablotron_device.h"
+#include "string_view.h"
 
 namespace esphome {
 namespace jablotron {
@@ -7,13 +8,12 @@ namespace jablotron {
 class ResponseHandler {
  public:
   virtual ~ResponseHandler() = default;
-  virtual bool invoke(StringView) const = 0;
+  virtual bool invoke(StringView response) const = 0;
 
- public:
   bool is_last_response() const;
 
  protected:
-  void set_is_last_response(bool);
+  void set_is_last_response(bool value);
 
  private:
   bool is_last_response_ = false;
@@ -22,19 +22,19 @@ class ResponseHandler {
 class ResponseHandlerError : public ResponseHandler {
  public:
   ResponseHandlerError();
-  bool invoke(StringView) const final;
+  bool invoke(StringView response) const final;
 };
 
 class ResponseHandlerOK : public ResponseHandler {
  public:
   ResponseHandlerOK();
-  bool invoke(StringView) const final;
+  bool invoke(StringView response) const final;
 };
 
 class ResponseHandlerPrfState final : public ResponseHandler {
  public:
-  ResponseHandlerPrfState(const PeripheralDeviceVector &);
-  bool invoke(StringView) const final;
+  ResponseHandlerPrfState(const PeripheralDeviceVector &devices);
+  bool invoke(StringView response) const final;
 
  private:
   const PeripheralDeviceVector &devices_;
@@ -42,8 +42,8 @@ class ResponseHandlerPrfState final : public ResponseHandler {
 
 class ResponseHandlerState final : public ResponseHandler {
  public:
-  ResponseHandlerState(const SectionDeviceVector &);
-  bool invoke(StringView) const final;
+  ResponseHandlerState(const SectionDeviceVector &devices);
+  bool invoke(StringView response) const final;
 
  private:
   const SectionDeviceVector &devices_;
