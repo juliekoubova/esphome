@@ -65,7 +65,7 @@ void JablotronComponent::send_queued_request_() {
   if (!this->request_queue_.empty()) {
     auto request = std::move(this->request_queue_.front());
     this->request_queue_.pop_front();
-    this->send_request_(std::move(request));
+    this->send_request_(request);
     this->response_awaiter_.request_sent();
   }
 }

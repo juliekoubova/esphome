@@ -8,7 +8,7 @@ namespace jablotron {
 
 namespace {
 
-static const char *const TAG = "jablotron";
+const char *const TAG = "jablotron";
 
 uint8_t parse_hex_nibble(char hex) {
   if (hex >= '0' && hex <= '9') {

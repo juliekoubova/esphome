@@ -8,8 +8,8 @@ namespace jablotron_section {
 
 class SectionSensor : public text_sensor::TextSensor, public jablotron::SectionDevice {
  public:
-  void set_state(jablotron::StringView) override;
-  void set_parent_jablotron(jablotron::JablotronComponent *) override;
+  void set_state(jablotron::StringView value) override;
+  void set_parent_jablotron(jablotron::JablotronComponent *parent) override;
 
  private:
   std::string last_value_;
