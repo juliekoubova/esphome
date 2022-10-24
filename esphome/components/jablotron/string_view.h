@@ -35,7 +35,7 @@ class StringView {
 
   StringView substr(size_type pos = 0, size_type count = NPOS) const {
     if (pos > this->size_) {
-      throw std::out_of_range("pos out of range");
+      return StringView{};
     }
     auto rcount = std::min(this->size_ - pos, count);
     return StringView{this->data_ + pos, rcount};

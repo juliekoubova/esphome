@@ -7,8 +7,8 @@ namespace jablotron_info {
 
 class InfoSensor : public text_sensor::TextSensor, public jablotron::InfoDevice {
  public:
-  void set_state(jablotron::StringView) override;
-  void set_parent_jablotron(jablotron::JablotronComponent *) override;
+  void set_state(jablotron::StringView value) override;
+  void set_parent_jablotron(jablotron::JablotronComponent *parent) override;
 };
 
 }  // namespace jablotron_info
