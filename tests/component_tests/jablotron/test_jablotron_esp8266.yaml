@@ -24,7 +24,9 @@ binary_sensor:
     name: "Alarm entry delay"
 
 text_sensor:
-  - { id: info, platform: jablotron_info, name: "Jablotron Info" }
+  - id: jablo_info
+    platform: jablotron_info
+    name: "Jablotron Info"
   - id: entry_alarm
     platform: jablotron_section
     index: 1

@@ -32,10 +32,10 @@ def test_jablotron_esp32(generate_main):
     )
 
     # Then
-    assert "info = new jablotron_info::InfoSensor();" in main_cpp
-    assert "info->set_parent_jablotron(jablo);" in main_cpp
-    assert 'info->set_name("Jablotron Info");' in main_cpp
-    assert "info->set_entity_category(::ENTITY_CATEGORY_DIAGNOSTIC);" in main_cpp
+    assert "jablo_info = new jablotron_info::InfoSensor();" in main_cpp
+    assert "jablo_info->set_parent_jablotron(jablo);" in main_cpp
+    assert 'jablo_info->set_name("Jablotron Info");' in main_cpp
+    assert "jablo_info->set_entity_category(::ENTITY_CATEGORY_DIAGNOSTIC);" in main_cpp
 
 
 def test_jablotron_esp32idf(generate_main):
