@@ -15,6 +15,7 @@ class ResponseAwaiter {
  private:
   bool is_waiting_for_response_ = false;
   uint32_t last_send_time_ = 0;
+  const uint32_t send_wait_time_;
 };
 
 }  // namespace jablotron

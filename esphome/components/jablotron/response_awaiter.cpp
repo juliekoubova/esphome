@@ -7,8 +7,7 @@ namespace jablotron {
 ResponseAwaiter::ResponseAwaiter(uint32_t send_wait_time) : send_wait_time_{send_wait_time} {}
 
 bool ResponseAwaiter::is_waiting_for_response() const {
-  const uint32_t now = millis();
-  return is_waiting_for_response_ && (now - this->last_send_time_) < last_send_time_;
+  return is_waiting_for_response_ && (millis() - this->last_send_time_) < this->send_wait_time_;
 }
 
 void ResponseAwaiter::request_sent() {
