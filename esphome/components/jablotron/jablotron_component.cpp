@@ -86,7 +86,8 @@ void JablotronComponent::register_section(SectionDevice *device) {
 }
 
 void JablotronComponent::register_section_flag(SectionFlagDevice *device) {
-  ESP_LOGI(TAG, "Registering section flag flag=%u index=%u", device->get_flag(), device->get_index());
+  ESP_LOGI(TAG, "Registering section flag flag=%u index=%u", static_cast<uint32_t>(device->get_flag()),
+           device->get_index());
   this->section_flags_.push_back(device);
 }
 

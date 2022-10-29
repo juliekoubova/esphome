@@ -6,7 +6,7 @@ namespace jablotron {
 
 class ResponseAwaiter {
  public:
-  explicit ResponseAwaiter(uint32_t send_wait_time = 250);
+  explicit ResponseAwaiter(uint32_t send_wait_time = 2000);
 
   bool is_waiting_for_response() const;
   void request_sent();
