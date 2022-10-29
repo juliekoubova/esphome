@@ -53,6 +53,7 @@ template<uint16_t BufferSize> class UARTLineDevice : public uart::UARTDevice {
     }
 
     this->write_array(reinterpret_cast<const uint8_t *>(str.data()), str.size());
+    this->flush();
 
     if (this->flow_control_pin_ != nullptr) {
       this->flow_control_pin_->digital_write(false);
