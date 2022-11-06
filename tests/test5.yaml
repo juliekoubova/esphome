@@ -39,6 +39,7 @@ uart:
     baud_rate: 19200
 
 jablotron:
+  access_code: 1234
   uart_id: uart2
 
 i2c:

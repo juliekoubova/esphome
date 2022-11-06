@@ -26,6 +26,8 @@ class JablotronComponent : public UARTLineDevice<260>, public PollingComponent {
   void register_section(SectionDevice *device);
   void register_section_flag(SectionFlagDevice *device);
 
+  void set_access_code(std::string access_code);
+
  private:
   ResponseHandler *handle_response_(StringView response);
 
@@ -34,6 +36,8 @@ class JablotronComponent : public UARTLineDevice<260>, public PollingComponent {
   void queue_request_(std::string request);
   void send_queued_request_();
   void send_request_(const std::string &request);
+
+  std::string access_code_;
 
   InfoDeviceVector infos_;
   PeripheralDeviceVector peripherals_;

@@ -8,6 +8,7 @@ uart:
   baud_rate: 9600
 
 jablotron:
+  access_code: 1234
   flow_control_pin: GPIO14
   id: jablo
 

@@ -13,6 +13,7 @@ def test_jablotron_esp8266(generate_main):
     )
 
     # Then
+    assert 'jablotron_jablotroncomponent->set_access_code("1234");' in main_cpp
     assert "entry_delay->set_index(1);" in main_cpp
     assert "entry_delay->set_flag(6);" in main_cpp
     assert (
@@ -32,6 +33,7 @@ def test_jablotron_esp32(generate_main):
     )
 
     # Then
+    assert 'jablo->set_access_code("1234");' in main_cpp
     assert "jablo_info = new jablotron_info::InfoSensor();" in main_cpp
     assert "jablo_info->set_parent_jablotron(jablo);" in main_cpp
     assert 'jablo_info->set_name("Jablotron Info");' in main_cpp

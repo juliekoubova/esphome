@@ -7,7 +7,9 @@ from esphome.const import CONF_FLOW_CONTROL_PIN, CONF_ID, CONF_INDEX
 CODEOWNERS = ["@juliekoubova"]
 DEPENDENCIES = ["uart"]
 
+CONF_ACCESS_CODE = "access_code"
 CONF_JABLOTRON_ID = "jablotron_id"
+
 jablotron_ns = cg.esphome_ns.namespace("jablotron")
 JablotronComponent = jablotron_ns.class_(
     "JablotronComponent", cg.PollingComponent, uart.UARTDevice
@@ -18,6 +20,7 @@ CONFIG_SCHEMA = (
         {
             cv.GenerateID(): cv.declare_id(JablotronComponent),
             cv.Optional(CONF_FLOW_CONTROL_PIN): pins.gpio_output_pin_schema,
+            cv.Optional(CONF_ACCESS_CODE): cv.string,
         }
     )
     .extend(cv.polling_component_schema("1s"))
@@ -38,8 +41,13 @@ async def register_jablotron_device(var, config):
 
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
+
     if CONF_FLOW_CONTROL_PIN in config:
         flow_control_pin = await cg.gpio_pin_expression(config[CONF_FLOW_CONTROL_PIN])
         cg.add(var.set_flow_control_pin(flow_control_pin))
+
+    if CONF_ACCESS_CODE in config:
+        cg.add(var.set_access_code(config[CONF_ACCESS_CODE]))
+
     await cg.register_component(var, config)
     await uart.register_uart_device(var, config)

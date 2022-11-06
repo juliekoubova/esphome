@@ -38,6 +38,8 @@ void JablotronComponent::loop() {
   }
 }
 
+void JablotronComponent::set_access_code(std::string access_code) { this->access_code_ = std::move(access_code); }
+
 void JablotronComponent::queue_peripheral_request_() {
   if (!this->peripherals_.empty()) {
     this->queue_request_("PRFSTATE");
