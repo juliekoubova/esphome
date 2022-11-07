@@ -52,6 +52,9 @@ class StringView {
   bool operator==(const std::string &other) const noexcept { return *this == StringView{other}; }
   bool operator!=(const std::string &other) const noexcept { return *this != StringView{other}; }
 
+  bool operator==(const char *other) const noexcept { return *this == StringView{other}; }
+  bool operator!=(const char *other) const noexcept { return *this != StringView{other}; }
+
   static constexpr size_type NPOS = std::numeric_limits<size_t>::max();
 
  private:
