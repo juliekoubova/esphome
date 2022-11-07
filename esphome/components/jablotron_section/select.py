@@ -1,4 +1,5 @@
 import esphome.codegen as cg
+import esphome.config_validation as cv
 from esphome.components import select
 from esphome.components.jablotron import (
     CONF_INDEX,
@@ -8,11 +9,17 @@ from esphome.components.jablotron import (
 )
 from . import jablotron_section_ns
 
-SectionSensor = jablotron_section_ns.class_("SectionSelect", select.Select)
+SectionSelect = jablotron_section_ns.class_("SectionSelect", select.Select)
 
 DEPENDENCIES = ["jablotron"]
-CONFIG_SCHEMA = select.SELECT_SCHEMA.extend(JABLOTRON_DEVICE_SCHEMA).extend(
-    INDEX_SCHEMA
+CONFIG_SCHEMA = (
+    select.SELECT_SCHEMA.extend(JABLOTRON_DEVICE_SCHEMA)
+    .extend(INDEX_SCHEMA)
+    .extend(
+        {
+            cv.GenerateID(): cv.declare_id(SectionSelect),
+        }
+    )
 )
 
 
