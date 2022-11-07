@@ -1,7 +1,9 @@
 #pragma once
 #include <deque>
-#include <vector>
+#include <set>
+#include <sstream>
 #include <string>
+#include <vector>
 #include "esphome/core/component.h"
 #include "esphome/components/uart/uart.h"
 #include "jablotron_device.h"
@@ -27,6 +29,7 @@ class JablotronComponent : public UARTLineDevice<260>, public PollingComponent {
 
   void register_info(InfoDevice *device);
   void register_peripheral(PeripheralDevice *device);
+  void register_pg(PGDevice *device);
   void register_section(SectionDevice *device);
   void register_section_flag(SectionFlagDevice *device);
 
@@ -36,14 +39,29 @@ class JablotronComponent : public UARTLineDevice<260>, public PollingComponent {
   ResponseHandler *handle_response_(StringView response);
 
   void queue_peripheral_request_();
+  void queue_pg_request_();
   void queue_section_request_();
+  void queue_section_flag_request_();
+
   void send_queued_request_();
   void send_request_(const std::string &request);
+
+  template<typename T> std::string get_index_string(const std::vector<T *> &items) {
+    std::set<int32_t> indices;
+    std::transform(std::begin(items), std::end(items), std::inserter(indices, indices.begin()),
+                   [](const T *item) { return item->get_index(); });
+    std::stringstream stream;
+    for (int32_t index : indices) {
+      stream << ' ' << index;
+    }
+    return stream.str();
+  }
 
   std::string access_code_;
 
   InfoDeviceVector infos_;
   PeripheralDeviceVector peripherals_;
+  PGDeviceVector pgs_;
   SectionDeviceVector sections_;
   SectionFlagDeviceVector section_flags_;
   std::deque<std::string> request_queue_;

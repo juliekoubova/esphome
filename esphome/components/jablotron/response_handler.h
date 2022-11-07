@@ -31,6 +31,15 @@ class ResponseHandlerOK : public ResponseHandler {
   bool invoke(StringView response) const final;
 };
 
+// class ResponseHandlerPGState final : public ResponseHandler {
+//  public:
+//   ResponseHandlerPGState(const PGDeviceVector &devices);
+//   bool invoke(StringView response) const final;
+
+//  private:
+//   const PeripheralDeviceVector &devices_;
+// }
+
 class ResponseHandlerPrfState final : public ResponseHandler {
  public:
   ResponseHandlerPrfState(const PeripheralDeviceVector &devices);

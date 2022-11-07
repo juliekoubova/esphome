@@ -24,7 +24,7 @@ SECTION_FLAGS = {
     "EXIT": 7,
 }
 
-DEPENDENCIES = ["jablotron"]
+DEPENDENCIES = ["jablotron", "binary_sensor"]
 CONFIG_SCHEMA = (
     binary_sensor.binary_sensor_schema(SectionFlagSensor)
     .extend(JABLOTRON_DEVICE_SCHEMA)

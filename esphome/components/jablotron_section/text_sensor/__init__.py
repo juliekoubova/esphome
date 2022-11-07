@@ -7,8 +7,8 @@ from esphome.components.jablotron import (
     JABLOTRON_DEVICE_SCHEMA,
     register_jablotron_device,
 )
+from esphome.components.jablotron_section import jablotron_section_ns
 
-jablotron_section_ns = cg.esphome_ns.namespace("jablotron_section")
 SectionSensor = jablotron_section_ns.class_("SectionSensor", text_sensor.TextSensor)
 
 DEPENDENCIES = ["jablotron"]

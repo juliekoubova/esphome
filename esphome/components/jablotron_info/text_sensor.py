@@ -6,7 +6,7 @@ from esphome.components.jablotron import (
     JABLOTRON_DEVICE_SCHEMA,
 )
 
-DEPENDENCIES = ["jablotron"]
+DEPENDENCIES = ["jablotron", "text_sensor"]
 
 jablotron_info_ns = cg.esphome_ns.namespace("jablotron_info")
 InfoSensor = jablotron_info_ns.class_("InfoSensor", text_sensor.TextSensor)

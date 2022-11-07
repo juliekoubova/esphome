@@ -8,11 +8,10 @@ esphome:
         condition:
           - api.connected
           - wifi.connected
-          - time.has_time
         then:
           - logger.log: Have time
   includes:
-    - custom.h
+    # - custom.h
 
 esp8266:
   board: d1_mini
@@ -107,3 +106,9 @@ text_sensor:
     platform: jablotron_section
     index: 1
     name: Entry alarm
+
+switch:
+  - id: pg
+    platform: jablotron_pg
+    index: 1
+    name: Windows open

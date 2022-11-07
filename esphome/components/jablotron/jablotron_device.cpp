@@ -4,6 +4,31 @@
 namespace esphome {
 namespace jablotron {
 
+static const char TAG[] = "jablotron";
+
+void JablotronDevice::set_parent_jablotron(JablotronComponent *parent) {
+  if (this->parent_ != parent) {
+    this->parent_ = parent;
+    if (parent != nullptr) {
+      this->register_parent(*parent);
+    }
+  }
+}
+
+JablotronComponent *JablotronDevice::get_parent_jablotron() const { return this->parent_; }
+
+const std::string &IndexedDevice::get_index_string() const {
+  if (this->index_str_.empty()) {
+    ESP_LOGE(TAG, "Index not set");
+  }
+  return this->index_str_;
+}
+
+void IndexedDevice::set_index(int value) {
+  this->index_ = value;
+  this->index_str_ = std::to_string(value);
+}
+
 SectionFlag SectionFlagDevice::get_flag() const { return this->flag_; }
 
 void SectionFlagDevice::set_flag(SectionFlag value) { this->flag_ = value; }

@@ -11,7 +11,14 @@ class JablotronComponent;
 class JablotronDevice {
  public:
   virtual ~JablotronDevice() = default;
-  virtual void set_parent_jablotron(JablotronComponent *parent) = 0;
+  virtual void set_parent_jablotron(JablotronComponent *parent);
+  JablotronComponent *get_parent_jablotron() const;
+
+ protected:
+  virtual void register_parent(JablotronComponent &parent) {}
+
+ private:
+  JablotronComponent *parent_ = nullptr;
 };
 
 class IndexedDevice {
@@ -19,10 +26,12 @@ class IndexedDevice {
   virtual ~IndexedDevice() = default;
 
   int get_index() const { return this->index_; }
-  virtual void set_index(int value) { this->index_ = value; }
+  const std::string &get_index_string() const;
+  void set_index(int value);
 
  private:
   int index_ = -1;
+  std::string index_str_;
 };
 
 template<typename T = StringView> class SensorDevice {
@@ -62,6 +71,9 @@ using PeripheralDeviceVector = std::vector<PeripheralDevice *>;
 
 using SectionDevice = IndexedSensorDevice<StringView>;
 using SectionDeviceVector = std::vector<SectionDevice *>;
+
+using PGDevice = IndexedSensorDevice<bool>;
+using PGDeviceVector = std::vector<PGDevice *>;
 
 using InfoDeviceVector = std::vector<InfoDevice *>;
 using SectionFlagDeviceVector = std::vector<SectionFlagDevice *>;

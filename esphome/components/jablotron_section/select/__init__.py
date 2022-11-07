@@ -7,10 +7,11 @@ from esphome.components.jablotron import (
     JABLOTRON_DEVICE_SCHEMA,
     register_jablotron_device,
 )
-from . import jablotron_section_ns
+from esphome.components.jablotron_section import jablotron_section_ns
 
 SectionSelect = jablotron_section_ns.class_("SectionSelect", select.Select)
 
+AUTO_LOAD = ["select"]
 DEPENDENCIES = ["jablotron"]
 CONFIG_SCHEMA = (
     select.SELECT_SCHEMA.extend(JABLOTRON_DEVICE_SCHEMA)

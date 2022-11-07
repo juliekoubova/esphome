@@ -1,7 +1,5 @@
 #include "jablotron_component.h"
 #include "response_handler.h"
-#include <set>
-#include <sstream>
 
 namespace esphome {
 namespace jablotron {
@@ -47,18 +45,21 @@ void JablotronComponent::queue_peripheral_request_() {
   }
 }
 
+void JablotronComponent::queue_pg_request_() {
+  if (!this->pgs_.empty()) {
+    this->queue_request("PGSTATE");
+  }
+}
+
 void JablotronComponent::queue_section_request_() {
   if (!this->sections_.empty()) {
-    std::set<int32_t> indices;
-    std::transform(std::begin(sections_), std::end(sections_), std::inserter(indices, indices.begin()),
-                   [](const SectionDevice *section) { return section->get_index(); });
+    this->queue_request("STATE" + this->get_index_string(this->sections_));
+  }
+}
 
-    std::stringstream stream;
-    for (int32_t index : indices) {
-      stream << ' ' << index;
-    }
-    this->queue_request("STATE" + stream.str());
-    this->queue_request("FLAGS" + stream.str());
+void JablotronComponent::queue_section_flag_request_() {
+  if (!this->section_flags_.empty()) {
+    this->queue_request("FLAGS" + this->get_index_string(this->section_flags_));
   }
 }
 
@@ -66,6 +67,8 @@ void JablotronComponent::send_queued_request_() {
   if (this->request_queue_.empty() && this->pending_update_) {
     this->queue_peripheral_request_();
     this->queue_section_request_();
+    this->queue_section_flag_request_();
+    this->queue_pg_request_();
     this->pending_update_ = false;
   }
   if (!this->request_queue_.empty()) {
@@ -109,6 +112,11 @@ void JablotronComponent::register_section_flag(SectionFlagDevice *device) {
 void JablotronComponent::register_peripheral(PeripheralDevice *device) {
   ESP_LOGI(TAG, "Registering peripheral index=%u", device->get_index());
   this->peripherals_.push_back(device);
+}
+
+void JablotronComponent::register_pg(PGDevice *device) {
+  ESP_LOGI(TAG, "Registering PG index=%u", device->get_index());
+  this->pgs_.push_back(device);
 }
 
 void JablotronComponent::register_info(InfoDevice *device) {
