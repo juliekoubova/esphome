@@ -15,11 +15,11 @@ void SectionSelect::control(std::string const &value) {
     return;
   }
   if (value == ARMED) {
-    this->parent_->queue_request_access_code("SET " + this->index_string_)
+    this->parent_->queue_request_access_code("SET " + this->index_string_);
   } else if (value == ARMED_PART) {
-    this->parent_->queue_request_access_code("SETP " + this->index_string_)
+    this->parent_->queue_request_access_code("SETP " + this->index_string_);
   } else if (value == READY) {
-    this->parent_->queue_request_access_code("UNSET " + this->index_string_)
+    this->parent_->queue_request_access_code("UNSET " + this->index_string_);
   }
 }
 
