@@ -81,9 +81,13 @@ void JablotronComponent::queue_request(std::string request) {
   this->request_queue_.emplace_back(std::move(request));
 }
 
+void JablotronComponent::queue_request_access_code(std::string request, const std::string &access_code) {
+  ESP_LOGI(TAG, "Queueing request '" LOG_SECRET("%s ") "%s'", access_code_.c_str(), request.c_str());
+  this->request_queue_.emplace_back(access_code + ' ' + std::move(request));
+}
+
 void JablotronComponent::queue_request_access_code(std::string request) {
-  ESP_LOGI(TAG, "Queueing request '" LOG_SECRET("%s") "%s'", access_code_.c_str(), request.c_str());
-  this->request_queue_.emplace_back(access_code_ + ' ' + std::move(request));
+  this->queue_request_access_code(std::move(request), access_code_);
 }
 
 void JablotronComponent::send_request_(const std::string &request) {
