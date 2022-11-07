@@ -11,17 +11,17 @@ class StringView {
  public:
   using size_type = std::size_t;
 
-  StringView();
-  StringView(const char *begin);
-  StringView(const char *begin, size_type size);
-  StringView(const std::string &str);
+  constexpr StringView();
+  constexpr StringView(const char *begin);
+  constexpr StringView(const char *begin, size_type size);
+  constexpr StringView(const std::string &str);
 
-  const char *data() const noexcept { return this->data_; }
-  bool empty() const noexcept { return this->size_ == 0; }
-  size_type size() const noexcept { return this->size_; }
+  constexpr const char *data() const noexcept { return this->data_; }
+  constexpr bool empty() const noexcept { return this->size_ == 0; }
+  constexpr size_type size() const noexcept { return this->size_; }
   operator std::string() const { return std::string{this->data_, this->size_}; }
 
-  size_type starts_with(StringView s) const { return this->substr(0, s.size()) == s; }
+  constexpr bool starts_with(StringView s) const { return this->substr(0, s.size()) == s; }
 
   void remove_prefix(size_type n) {
     if (n > this->size_) {
@@ -33,7 +33,7 @@ class StringView {
     }
   }
 
-  StringView substr(size_type pos = 0, size_type count = NPOS) const {
+  constexpr StringView substr(size_type pos = 0, size_type count = NPOS) const {
     if (pos > this->size_) {
       return StringView{};
     }
