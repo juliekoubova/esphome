@@ -1,5 +1,6 @@
 #include "jablotron_component.h"
 #include "response_handler.h"
+#include <set>
 #include <sstream>
 
 namespace esphome {
@@ -48,13 +49,16 @@ void JablotronComponent::queue_peripheral_request_() {
 
 void JablotronComponent::queue_section_request_() {
   if (!this->sections_.empty()) {
-    std::stringstream indices;
-    for (auto *const section : sections_) {
-      indices << ' ';
-      indices << section->get_index();
+    std::set<int32_t> indices;
+    std::transform(std::begin(sections_), std::end(sections_), std::back_inserter(indices),
+                   [](const SectionDevice *section) { return section->get_index(); });
+
+    std::stringstream stream;
+    for (int32_t index : indices) {
+      stream << ' ' << index;
     }
-    this->queue_request("STATE" + indices.str());
-    this->queue_request("FLAGS" + indices.str());
+    this->queue_request("STATE" + stream.str());
+    this->queue_request("FLAGS" + stream.str());
   }
 }
 
