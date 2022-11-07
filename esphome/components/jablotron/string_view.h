@@ -49,12 +49,18 @@ class StringView {
 
   bool operator!=(const StringView &other) const noexcept { return !(*this == other); }
 
+  bool operator==(const std::string &other) const noexcept { return *this == StringView{other}; }
+  bool operator!=(const std::string &other) const noexcept { return *this != StringView{other}; }
+
   static constexpr size_type NPOS = std::numeric_limits<size_t>::max();
 
  private:
   const char *data_;
   size_type size_;
 };
+
+bool operator==(const std::string &string, const StringView &view) noexcept { return view == string; }
+bool operator!=(const std::string &string, const StringView &view) noexcept { return view != string; }
 
 bool get_bit_in_hex_string(StringView str, size_t index);
 bool starts_with(StringView str, StringView prefix);
