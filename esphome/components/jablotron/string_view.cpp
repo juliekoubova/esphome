@@ -25,6 +25,55 @@ uint8_t parse_hex_byte(char high, char low) { return (parse_hex_nibble(high) << 
 
 }  // namespace
 
+StringView::StringView() : data_{nullptr}, size_{0} {}
+StringView::StringView(const char *begin) : data_{begin}, size_{std::strlen(begin)} {}
+
+StringView::StringView(const char *begin, size_t size) : data_{begin}, size_{size} {}
+
+StringView::StringView(const std::string &str) : data_{str.data()}, size_{str.size()} {}
+
+const char *StringView::data() const noexcept { return this->data_; }
+bool StringView::empty() const noexcept { return this->size_ == 0; }
+StringView::size_type StringView::size() const noexcept { return this->size_; }
+StringView::operator std::string() const { return std::string{this->data_, this->size_}; }
+
+bool StringView::starts_with(StringView s) const { return this->substr(0, s.size()) == s; }
+
+void StringView::remove_prefix(size_type n) {
+  if (n > this->size_) {
+    this->data_ = nullptr;
+    this->size_ = 0;
+  } else {
+    this->data_ += n;
+    this->size_ -= n;
+  }
+}
+
+StringView StringView::substr(size_type pos = 0, size_type count = NPOS) const {
+  if (pos > this->size_) {
+    return StringView{};
+  }
+  auto rcount = std::min(this->size_ - pos, count);
+  return StringView{this->data_ + pos, rcount};
+}
+
+const char &StringView::operator[](size_type index) const { return this->data_[index]; }
+
+bool StringView::operator==(const StringView &other) const noexcept {
+  return this->size_ == other.size_ && (this->size_ == 0 || std::strncmp(this->data_, other.data_, this->size_) == 0);
+}
+
+bool StringView::operator!=(const StringView &other) const noexcept { return !(*this == other); }
+
+bool StringView::operator==(const std::string &other) const noexcept { return *this == StringView{other}; }
+bool StringView::operator!=(const std::string &other) const noexcept { return *this != StringView{other}; }
+
+bool StringView::operator==(const char *other) const noexcept { return *this == StringView{other}; }
+bool StringView::operator!=(const char *other) const noexcept { return *this != StringView{other}; }
+
+bool operator==(const std::string &string, const StringView &view) noexcept { return view == string; }
+bool operator!=(const std::string &string, const StringView &view) noexcept { return view != string; }
+
 bool get_bit_in_hex_string(StringView str, size_t index) {
   if (index >= str.size()) {
     ESP_LOGE(TAG, "get_bit_in_hex_string: index=%zu out of string bounds", index);

@@ -11,49 +11,31 @@ class StringView {
  public:
   using size_type = std::size_t;
 
-  constexpr StringView() : data_{nullptr}, size_{0} {}
-  constexpr StringView(const char *begin) : data_{begin}, size_{std::strlen(begin)} {}
-  constexpr StringView(const char *begin, size_type size) : data_{begin}, size_{size} {}
-  constexpr StringView(const std::string &str) : data_{str.data()}, size_{str.size()} {}
+  StringView();
+  StringView(const char *begin);
+  StringView(const char *begin, size_type size);
+  StringView(const std::string &str);
 
-  constexpr const char *data() const noexcept { return this->data_; }
-  constexpr bool empty() const noexcept { return this->size_ == 0; }
-  constexpr size_type size() const noexcept { return this->size_; }
-  operator std::string() const { return std::string{this->data_, this->size_}; }
+  const char *data() const noexcept;
+  bool empty() const noexcept;
+  size_type size() const noexcept;
+  operator std::string() const;
 
-  constexpr bool starts_with(StringView s) const { return this->substr(0, s.size()) == s; }
+  bool starts_with(StringView s) const;
+  void remove_prefix(size_type n);
+  StringView substr(size_type pos = 0, size_type count = NPOS) const;
 
-  void remove_prefix(size_type n) {
-    if (n > this->size_) {
-      this->data_ = nullptr;
-      this->size_ = 0;
-    } else {
-      this->data_ += n;
-      this->size_ -= n;
-    }
-  }
+  const char &operator[](size_type index) const;
 
-  constexpr StringView substr(size_type pos = 0, size_type count = NPOS) const {
-    if (pos > this->size_) {
-      return StringView{};
-    }
-    auto rcount = std::min(this->size_ - pos, count);
-    return StringView{this->data_ + pos, rcount};
-  }
+  bool operator==(const StringView &other) const noexcept;
 
-  const char &operator[](size_type index) const { return this->data_[index]; }
+  bool operator!=(const StringView &other) const noexcept;
 
-  constexpr bool operator==(const StringView &other) const noexcept {
-    return this->size_ == other.size_ && (this->size_ == 0 || std::strncmp(this->data_, other.data_, this->size_) == 0);
-  }
+  bool operator==(const std::string &other) const noexcept;
+  bool operator!=(const std::string &other) const noexcept;
 
-  constexpr bool operator!=(const StringView &other) const noexcept { return !(*this == other); }
-
-  constexpr bool operator==(const std::string &other) const noexcept { return *this == StringView{other}; }
-  constexpr bool operator!=(const std::string &other) const noexcept { return *this != StringView{other}; }
-
-  constexpr bool operator==(const char *other) const noexcept { return *this == StringView{other}; }
-  constexpr bool operator!=(const char *other) const noexcept { return *this != StringView{other}; }
+  bool operator==(const char *other) const noexcept;
+  bool operator!=(const char *other) const noexcept;
 
   static constexpr size_type NPOS = std::numeric_limits<size_t>::max();
 
@@ -62,8 +44,8 @@ class StringView {
   size_type size_;
 };
 
-constexpr bool operator==(const std::string &string, const StringView &view) noexcept { return view == string; }
-constexpr bool operator!=(const std::string &string, const StringView &view) noexcept { return view != string; }
+bool operator==(const std::string &string, const StringView &view) noexcept;
+bool operator!=(const std::string &string, const StringView &view) noexcept;
 
 bool get_bit_in_hex_string(StringView str, size_t index);
 bool starts_with(StringView str, StringView prefix);
