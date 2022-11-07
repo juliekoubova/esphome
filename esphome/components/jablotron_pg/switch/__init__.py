@@ -2,6 +2,7 @@ import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import switch
 from esphome.components.jablotron import (
+    CONF_ID,
     CONF_INDEX,
     INDEX_SCHEMA,
     JABLOTRON_DEVICE_SCHEMA,
@@ -24,6 +25,7 @@ CONFIG_SCHEMA = (
 
 
 async def to_code(config):
-    var = await switch.new_switch(config)
+    var = cg.new_Pvariable(config[CONF_ID])
+    await switch.register_switch(var, config)
     cg.add(var.set_index(config[CONF_INDEX]))
     await register_jablotron_device(var, config)
