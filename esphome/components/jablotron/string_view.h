@@ -11,10 +11,10 @@ class StringView {
  public:
   using size_type = std::size_t;
 
-  constexpr StringView();
-  constexpr StringView(const char *begin);
-  constexpr StringView(const char *begin, size_type size);
-  constexpr StringView(const std::string &str);
+  constexpr StringView() : data_{nullptr}, size_{0} {}
+  constexpr StringView(const char *begin) : data_{begin}, size_{std::strlen(begin)} {}
+  constexpr StringView(const char *begin, size_type size) : data_{begin}, size_{size} {}
+  constexpr StringView(const std::string &str) : data_{str.data()}, size_{str.size()} {}
 
   constexpr const char *data() const noexcept { return this->data_; }
   constexpr bool empty() const noexcept { return this->size_ == 0; }

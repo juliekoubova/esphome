@@ -25,13 +25,6 @@ uint8_t parse_hex_byte(char high, char low) { return (parse_hex_nibble(high) << 
 
 }  // namespace
 
-StringView::StringView() : data_{nullptr}, size_{0} {}
-StringView::StringView(const char *begin) : data_{begin}, size_{std::strlen(begin)} {}
-
-StringView::StringView(const char *begin, size_t size) : data_{begin}, size_{size} {}
-
-StringView::StringView(const std::string &str) : data_{str.data()}, size_{str.size()} {}
-
 bool get_bit_in_hex_string(StringView str, size_t index) {
   if (index >= str.size()) {
     ESP_LOGE(TAG, "get_bit_in_hex_string: index=%zu out of string bounds", index);
