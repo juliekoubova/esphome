@@ -43,17 +43,17 @@ class StringView {
 
   const char &operator[](size_type index) const { return this->data_[index]; }
 
-  bool operator==(const StringView &other) const noexcept {
+  constexpr bool operator==(const StringView &other) const noexcept {
     return this->size_ == other.size_ && (this->size_ == 0 || std::strncmp(this->data_, other.data_, this->size_) == 0);
   }
 
-  bool operator!=(const StringView &other) const noexcept { return !(*this == other); }
+  constexpr bool operator!=(const StringView &other) const noexcept { return !(*this == other); }
 
-  bool operator==(const std::string &other) const noexcept { return *this == StringView{other}; }
-  bool operator!=(const std::string &other) const noexcept { return *this != StringView{other}; }
+  constexpr bool operator==(const std::string &other) const noexcept { return *this == StringView{other}; }
+  constexpr bool operator!=(const std::string &other) const noexcept { return *this != StringView{other}; }
 
-  bool operator==(const char *other) const noexcept { return *this == StringView{other}; }
-  bool operator!=(const char *other) const noexcept { return *this != StringView{other}; }
+  constexpr bool operator==(const char *other) const noexcept { return *this == StringView{other}; }
+  constexpr bool operator!=(const char *other) const noexcept { return *this != StringView{other}; }
 
   static constexpr size_type NPOS = std::numeric_limits<size_t>::max();
 
@@ -62,8 +62,8 @@ class StringView {
   size_type size_;
 };
 
-bool operator==(const std::string &string, const StringView &view) noexcept { return view == string; }
-bool operator!=(const std::string &string, const StringView &view) noexcept { return view != string; }
+constexpr bool operator==(const std::string &string, const StringView &view) noexcept { return view == string; }
+constexpr bool operator!=(const std::string &string, const StringView &view) noexcept { return view != string; }
 
 bool get_bit_in_hex_string(StringView str, size_t index);
 bool starts_with(StringView str, StringView prefix);
