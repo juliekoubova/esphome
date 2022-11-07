@@ -50,7 +50,7 @@ void JablotronComponent::queue_peripheral_request_() {
 void JablotronComponent::queue_section_request_() {
   if (!this->sections_.empty()) {
     std::set<int32_t> indices;
-    std::transform(std::begin(sections_), std::end(sections_), std::inserter(indices),
+    std::transform(std::begin(sections_), std::end(sections_), std::inserter(indices, indices.begin()),
                    [](const SectionDevice *section) { return section->get_index(); });
 
     std::stringstream stream;
