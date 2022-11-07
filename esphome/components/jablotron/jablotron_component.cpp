@@ -16,7 +16,7 @@ JablotronComponent::JablotronComponent()
 
 void JablotronComponent::setup() {
   UARTLineDevice::setup();
-  this->queue_request_("VER");
+  this->queue_request("VER");
 }
 
 void JablotronComponent::update() { this->pending_update_ = true; }
@@ -42,7 +42,7 @@ void JablotronComponent::set_access_code(std::string access_code) { this->access
 
 void JablotronComponent::queue_peripheral_request_() {
   if (!this->peripherals_.empty()) {
-    this->queue_request_("PRFSTATE");
+    this->queue_request("PRFSTATE");
   }
 }
 
@@ -53,8 +53,8 @@ void JablotronComponent::queue_section_request_() {
       indices << ' ';
       indices << section->get_index();
     }
-    this->queue_request_("STATE" + indices.str());
-    this->queue_request_("FLAGS" + indices.str());
+    this->queue_request("STATE" + indices.str());
+    this->queue_request("FLAGS" + indices.str());
   }
 }
 
@@ -72,9 +72,14 @@ void JablotronComponent::send_queued_request_() {
   }
 }
 
-void JablotronComponent::queue_request_(std::string request) {
-  ESP_LOGD(TAG, "Queueing request '%s'", request.c_str());
+void JablotronComponent::queue_request(std::string request) {
+  ESP_LOGI(TAG, "Queueing request '%s'", request.c_str());
   this->request_queue_.emplace_back(std::move(request));
+}
+
+void JablotronComponent::queue_request_access_code(std::string request) {
+  ESP_LOGI(TAG, "Queueing request '" LOG_SECRET("%s") "%s'", access_code_.c_str(), request.c_str());
+  this->request_queue_.emplace_back(access_code_ + ' ' + std::move(request));
 }
 
 void JablotronComponent::send_request_(const std::string &request) {

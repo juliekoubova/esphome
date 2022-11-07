@@ -1,7 +1,7 @@
 #include "section_sensor.h"
 #include "esphome/core/log.h"
-#include "../jablotron/string_view.h"
-#include "../jablotron/jablotron_component.h"
+#include "esphome/components/jablotron/string_view.h"
+#include "esphome/components/jablotron/jablotron_component.h"
 
 namespace esphome {
 namespace jablotron_section {

@@ -8,21 +8,31 @@ namespace jablotron {
 
 class JablotronComponent;
 
-template<typename T = StringView> class JablotronDevice {
+class JablotronDevice {
  public:
   virtual ~JablotronDevice() = default;
   virtual void set_parent_jablotron(JablotronComponent *parent) = 0;
-  virtual void set_state(T value) = 0;
 };
 
-template<typename T = StringView> class IndexedDevice : public JablotronDevice<T> {
+class IndexedDevice {
  public:
+  virtual ~IndexedDevice() = default;
+
   int get_index() const { return this->index_; }
-  void set_index(int value) { this->index_ = value; }
+  virtual void set_index(int value) { this->index_ = value; }
 
  private:
   int index_ = -1;
 };
+
+template<typename T = StringView> class SensorDevice {
+ public:
+  virtual ~SensorDevice() = default;
+  virtual void set_state(T value) = 0;
+};
+
+template<typename T = StringView>
+class IndexedSensorDevice : public JablotronDevice, public IndexedDevice, public SensorDevice<T> {};
 
 enum class SectionFlag {
   NONE = 0,
@@ -35,7 +45,7 @@ enum class SectionFlag {
   EXIT = 7
 };
 
-class SectionFlagDevice : public IndexedDevice<bool> {
+class SectionFlagDevice : public IndexedSensorDevice<bool> {
  public:
   SectionFlag get_flag() const;
   void set_flag(SectionFlag value);
@@ -45,15 +55,15 @@ class SectionFlagDevice : public IndexedDevice<bool> {
   SectionFlag flag_ = SectionFlag::NONE;
 };
 
-using PeripheralDevice = IndexedDevice<bool>;
+class InfoDevice : public JablotronDevice, public SensorDevice<StringView> {};
+
+using PeripheralDevice = IndexedSensorDevice<bool>;
 using PeripheralDeviceVector = std::vector<PeripheralDevice *>;
 
-using SectionDevice = IndexedDevice<StringView>;
+using SectionDevice = IndexedSensorDevice<StringView>;
 using SectionDeviceVector = std::vector<SectionDevice *>;
 
-using InfoDevice = JablotronDevice<StringView>;
 using InfoDeviceVector = std::vector<InfoDevice *>;
-
 using SectionFlagDeviceVector = std::vector<SectionFlagDevice *>;
 
 }  // namespace jablotron
