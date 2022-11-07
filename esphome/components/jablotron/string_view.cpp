@@ -49,7 +49,7 @@ void StringView::remove_prefix(size_type n) {
   }
 }
 
-StringView StringView::substr(size_type pos = 0, size_type count = NPOS) const {
+StringView StringView::substr(size_type pos, size_type count) const {
   if (pos > this->size_) {
     return StringView{};
   }
