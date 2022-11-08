@@ -15,7 +15,7 @@
 namespace esphome {
 namespace jablotron {
 
-class JablotronComponent : public UARTLineDevice<260>, public PollingComponent {
+class JablotronComponent : public UARTLineDevice, public PollingComponent {
  public:
   JablotronComponent();
 

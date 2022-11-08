@@ -21,9 +21,8 @@ void JablotronComponent::setup() {
 void JablotronComponent::update() { this->pending_update_ = true; }
 
 void JablotronComponent::loop() {
-  auto *line = this->read_line();
-  if (line != nullptr) {
-    ESP_LOGD(TAG, "Received line: '%s'", line);
+  auto lines = this->read_lines();
+  for (const auto &line : lines) {
     auto *handler = this->handle_response_(line);
     if (handler == nullptr) {
       ESP_LOGE(TAG, "Unknown message: '%s'", line);
