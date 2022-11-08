@@ -21,7 +21,7 @@ std::vector<std::string> UARTLineDevice::read_lines() {
   while (this->available()) {
     uint8_t byte;
     if (!this->read_byte(&byte)) {
-      return;
+      break;
     }
     if (byte == '\n') {
       continue;
