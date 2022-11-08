@@ -7,7 +7,7 @@ namespace jablotron {
 static const char *const TAG = "jablotron";
 
 JablotronComponent::JablotronComponent()
-    : PollingComponent(2500),
+    : PollingComponent(60'000),
       pgstate_handler_{pgs_},
       prfstate_handler_{peripherals_},
       state_handler_{sections_},
