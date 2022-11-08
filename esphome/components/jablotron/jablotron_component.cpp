@@ -31,7 +31,7 @@ void JablotronComponent::loop() {
     }
   }
 
-  if (!this->available() /*&& this->line_buffer_empty()*/ && !this->response_awaiter_.is_waiting_for_response()) {
+  if (!this->available() && this->line_buffer_empty() && !this->response_awaiter_.is_waiting_for_response()) {
     this->send_queued_request_();
   }
 }
@@ -124,7 +124,9 @@ void JablotronComponent::register_info(InfoDevice *device) {
 }
 
 ResponseHandler *JablotronComponent::handle_response_(StringView response) {
-  if (prfstate_handler_.invoke(response)) {
+  if (pgstate_handler_.invoke(response)) {
+    return &pgstate_handler_;
+  } else if (prfstate_handler_.invoke(response)) {
     return &prfstate_handler_;
   } else if (state_handler_.invoke(response)) {
     return &state_handler_;

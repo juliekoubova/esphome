@@ -31,18 +31,18 @@ class ResponseHandlerOK : public ResponseHandler {
   bool invoke(StringView response) const final;
 };
 
-// class ResponseHandlerPGState final : public ResponseHandler {
-//  public:
-//   ResponseHandlerPGState(const PGDeviceVector &devices);
-//   bool invoke(StringView response) const final;
+class ResponseHandlerPGState final : public ResponseHandler {
+ public:
+  explicit ResponseHandlerPGState(const PGDeviceVector &devices);
+  bool invoke(StringView response) const final;
 
-//  private:
-//   const PeripheralDeviceVector &devices_;
-// }
+ private:
+  const PeripheralDeviceVector &devices_;
+};
 
 class ResponseHandlerPrfState final : public ResponseHandler {
  public:
-  ResponseHandlerPrfState(const PeripheralDeviceVector &devices);
+  explicit ResponseHandlerPrfState(const PeripheralDeviceVector &devices);
   bool invoke(StringView response) const final;
 
  private:
@@ -51,7 +51,7 @@ class ResponseHandlerPrfState final : public ResponseHandler {
 
 class ResponseHandlerState final : public ResponseHandler {
  public:
-  ResponseHandlerState(const SectionDeviceVector &devices);
+  explicit ResponseHandlerState(const SectionDeviceVector &devices);
   bool invoke(StringView response) const final;
 
  private:
@@ -60,7 +60,7 @@ class ResponseHandlerState final : public ResponseHandler {
 
 class ResponseHandlerVer final : public ResponseHandler {
  public:
-  ResponseHandlerVer(const InfoDeviceVector &devices);
+  explicit ResponseHandlerVer(const InfoDeviceVector &devices);
   bool invoke(StringView response) const final;
 
  private:
@@ -69,7 +69,7 @@ class ResponseHandlerVer final : public ResponseHandler {
 
 class ResponseHandlerSectionFlag final : public ResponseHandler {
  public:
-  ResponseHandlerSectionFlag(const SectionFlagDeviceVector &devices);
+  explicit ResponseHandlerSectionFlag(const SectionFlagDeviceVector &devices);
   bool invoke(StringView response) const final;
 
  private:

@@ -71,6 +71,7 @@ class JablotronComponent : public UARTLineDevice, public PollingComponent {
 
   ResponseHandlerError error_handler_;
   ResponseHandlerOK ok_handler_;
+  ResponseHandlerPGState pgstate_handler_;
   ResponseHandlerPrfState prfstate_handler_;
   ResponseHandlerState state_handler_;
   ResponseHandlerVer ver_handler_;

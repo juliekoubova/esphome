@@ -5,6 +5,8 @@
 namespace esphome {
 namespace jablotron {
 
+static constexpr const char TAG[] = "jablotron";
+
 bool ResponseHandler::is_last_response() const { return this->is_last_response_; }
 void ResponseHandler::set_is_last_response_(bool value) { this->is_last_response_ = value; }
 
@@ -15,6 +17,41 @@ bool ResponseHandlerError::invoke(StringView response) const {
 
 ResponseHandlerOK::ResponseHandlerOK() { this->set_is_last_response_(true); }
 bool ResponseHandlerOK::invoke(StringView response) const { return response == "OK"; }
+
+ResponseHandlerPGState::ResponseHandlerPGState(const PGDeviceVector &devices) : devices_{devices} {
+  this->set_is_last_response_(false);
+}
+
+bool ResponseHandlerPGState::invoke(StringView response) const {
+  if (response == "PGSTATE:") {
+    return true;
+  }
+  if (!try_remove_prefix_and_space(response, "PG ")) {
+    return false;
+  }
+
+  int index;
+  if (!try_remove_integer_and_space(response, index)) {
+    ESP_LOGE(TAG, "ResponseHandlerPGState: PG has no index: '%s'", response.data());
+    return false;
+  }
+
+  bool state;
+  if (response == "ON") {
+    state = true;
+  } else if (response == "OFF") {
+    state = false;
+  } else {
+    ESP_LOGE(TAG, "ResponseHandlerPGState: Unknown PG state: '%s'", response.data());
+    return false;
+  }
+
+  for (auto *device : this->devices_) {
+    if (device->get_index() == index) {
+      device->set_state(state);
+    }
+  }
+}
 
 ResponseHandlerPrfState::ResponseHandlerPrfState(const PeripheralDeviceVector &devices) : devices_{devices} {
   this->set_is_last_response_(true);
@@ -44,13 +81,12 @@ bool ResponseHandlerState::invoke(StringView response) const {
   }
   int index;
   if (!try_remove_integer_and_space(response, index)) {
-    ESP_LOGE("jablotron", "ResponseHandlerState: STATE has no index: '%s'", response.data());
-    return true;
+    ESP_LOGE(TAG, "ResponseHandlerState: STATE has no index: '%s'", response.data());
+    return false;
   }
   for (auto *device : this->devices_) {
     if (device->get_index() == index) {
       device->set_state(response);
-      return true;
     }
   }
   return true;
@@ -96,7 +132,7 @@ bool ResponseHandlerSectionFlag::invoke(StringView response) const {
 
   int index;
   if (!try_remove_integer_and_space(response, index)) {
-    ESP_LOGE("jablotron", "ResponseHandlerSectionFlag: section flag has no index: '%s'", response.data());
+    ESP_LOGE(TAG, "ResponseHandlerSectionFlag: section flag has no index: '%s'", response.data());
     return false;
   }
 
@@ -106,14 +142,13 @@ bool ResponseHandlerSectionFlag::invoke(StringView response) const {
   } else if (response == "OFF") {
     state = false;
   } else {
-    ESP_LOGE("jablotron", "ResponseHandlerSectionFlag: unknown flag state: '%s'", response.data());
+    ESP_LOGE(TAG, "ResponseHandlerSectionFlag: unknown flag state: '%s'", response.data());
     return false;
   }
 
   for (auto *device : this->devices_) {
     if (device->get_index() == index && device->get_flag() == flag) {
       device->set_state(state);
-      return true;
     }
   }
   return true;
