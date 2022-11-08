@@ -19,11 +19,13 @@ std::vector<std::string> UARTLineDevice::read_lines() {
   auto available = this->available();
   auto size = this->read_buffer_.size();
 
-  if (available) {
-    ESP_LOGD(TAG, "read_lines available=%u size=%u", available, size);
-    this->read_buffer_.resize(size + available);
-    this->read_array(reinterpret_cast<uint8_t *>(this->read_buffer_.data()) + size, available);
+  if (!available) {
+    return {};
   }
+
+  ESP_LOGD(TAG, "read_lines available=%u size=%u", available, size);
+  this->read_buffer_.resize(size + available);
+  this->read_array(reinterpret_cast<uint8_t *>(this->read_buffer_.data()) + size, available);
 
   std::vector<std::string> lines;
   std::string::const_iterator line_begin = this->read_buffer_.cbegin();
