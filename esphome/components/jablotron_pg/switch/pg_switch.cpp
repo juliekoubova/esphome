@@ -7,7 +7,8 @@ void PGSwitch::register_parent(jablotron::JablotronComponent &parent) { parent.r
 
 void PGSwitch::write_state(bool state) {
   std::string command = state ? "PGON " : "PGOFF ";
-  this->parent_->queue_request_access_code(command + this->get_index_string());
+  command += this->get_index_string();
+  this->get_parent_jablotron()->queue_request_access_code(std::move(command));
 }
 
 void PGSwitch::set_state(bool state) { this->publish_state(state); }

@@ -9,9 +9,6 @@ class PGSwitch : public jablotron::PGDevice, public switch_::Switch {
   void write_state(bool state) override;
   void register_parent(jablotron::JablotronComponent &parent) override;
   void set_state(bool state) override;
-
- private:
-  jablotron::JablotronComponent *parent_ = nullptr;
 };
 
 }  // namespace esphome::jablotron_pg
