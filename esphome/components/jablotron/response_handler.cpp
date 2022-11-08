@@ -12,7 +12,15 @@ void ResponseHandler::set_is_last_response_(bool value) { this->is_last_response
 
 ResponseHandlerError::ResponseHandlerError() { this->set_is_last_response_(true); }
 bool ResponseHandlerError::invoke(StringView response) const {
-  return starts_with(response, "ERROR: ") || response == "ERROR";
+  if (response == "ERROR") {
+    ESP_LOGE(TAG, "Received ERROR");
+    return true;
+  }
+  if (try_remove_prefix_and_space(response, "ERROR:")) {
+    ESP_LOGE(TAG, "Received ERROR: '%s'", response.data());
+    return true;
+  }
+  return false;
 }
 
 ResponseHandlerOK::ResponseHandlerOK() { this->set_is_last_response_(true); }
