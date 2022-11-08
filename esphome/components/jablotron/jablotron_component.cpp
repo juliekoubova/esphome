@@ -25,7 +25,7 @@ void JablotronComponent::loop() {
   for (const auto &line : lines) {
     auto *handler = this->handle_response_(line);
     if (handler == nullptr) {
-      ESP_LOGE(TAG, "Unknown message: '%s'", line);
+      ESP_LOGE(TAG, "Unknown message: '%s'", line.c_str());
     } else if (handler->is_last_response()) {
       this->response_awaiter_.response_received();
     }
