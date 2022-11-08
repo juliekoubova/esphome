@@ -47,7 +47,7 @@ void JablotronComponent::queue_peripheral_request_() {
 
 void JablotronComponent::queue_pg_request_() {
   if (!this->pgs_.empty()) {
-    this->queue_request("PGSTATE");
+    this->queue_request("PGSTATE" + this->get_index_string(this->pgs_));
   }
 }
 
