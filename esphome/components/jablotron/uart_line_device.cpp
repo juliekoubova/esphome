@@ -27,6 +27,7 @@ std::vector<std::string> UARTLineDevice::read_lines() {
       continue;
     } else if (byte == '\r') {
       if (!this->line_.empty()) {
+        ESP_LOGD(TAG, "read line '%s'", this->line_.c_str());
         lines.push_back(this->line_);
         this->line_.clear();
       }
