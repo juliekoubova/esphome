@@ -26,7 +26,7 @@ bool ResponseHandlerPGState::invoke(StringView response) const {
   if (response == "PGSTATE:") {
     return true;
   }
-  if (!try_remove_prefix_and_space(response, "PG ")) {
+  if (!try_remove_prefix_and_space(response, "PG")) {
     return false;
   }
 
