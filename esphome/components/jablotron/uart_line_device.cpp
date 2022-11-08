@@ -5,7 +5,7 @@ namespace jablotron {
 
 static const char *const TAG = "uart_line";
 
-bool UARTLineDevice::line_buffer_empty() const { return this->read_buffer_.empty(); }
+bool UARTLineDevice::line_buffer_empty() const { return this->line_.empty(); }
 
 void UARTLineDevice::setup() {
   if (this->flow_control_pin_ != nullptr) {
@@ -16,37 +16,25 @@ void UARTLineDevice::setup() {
 void UARTLineDevice::set_flow_control_pin(GPIOPin *flow_control_pin) { this->flow_control_pin_ = flow_control_pin; }
 
 std::vector<std::string> UARTLineDevice::read_lines() {
-  auto available = this->available();
-  auto size = this->read_buffer_.size();
-
-  if (!available) {
-    return {};
-  }
-
-  ESP_LOGD(TAG, "read_lines available=%u size=%u", available, size);
-  this->read_buffer_.resize(size + available);
-  this->read_array(reinterpret_cast<uint8_t *>(this->read_buffer_.data()) + size, available);
-
   std::vector<std::string> lines;
-  std::string::const_iterator line_begin = this->read_buffer_.cbegin();
-  ESP_LOGD(TAG, "read_lines read_buffer=\"%s\"", this->read_buffer_.c_str());
 
-  std::string line;
-  for (auto it = this->read_buffer_.cbegin(); it != this->read_buffer_.cend(); ++it) {
-    if (*it == '\n') {
+  while (this->available()) {
+    uint8_t byte;
+    if (!this->read_byte(&byte)) {
+      return;
+    }
+    if (byte == '\n') {
       continue;
-    } else if (*it == '\r') {
-      ESP_LOGD(TAG, "read_lines line=\"%s\"", line.c_str());
-      lines.push_back(line);
-      line.clear();
-      line_begin = it + 1;
+    } else if (byte == '\r') {
+      if (!this->line_.empty()) {
+        lines.push_back(this->line_);
+        this->line_.clear();
+      }
     } else {
-      line.push_back(*it);
+      this->line_.push_back(byte);
     }
   }
 
-  this->read_buffer_.erase(this->read_buffer_.begin(), line_begin);
-  ESP_LOGD(TAG, "read_lines read_buffer=\"%s\"", this->read_buffer_.c_str());
   return lines;
 }
 

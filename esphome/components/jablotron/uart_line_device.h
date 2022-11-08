@@ -13,7 +13,7 @@ class UARTLineDevice : public uart::UARTDevice {
   void write_line(std::string str);
 
  private:
-  std::string read_buffer_;
+  std::string line_;
   GPIOPin *flow_control_pin_ = nullptr;
 };
 
