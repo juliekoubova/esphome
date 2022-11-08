@@ -8,6 +8,7 @@ static const char *const TAG = "jablotron";
 
 JablotronComponent::JablotronComponent()
     : PollingComponent(2500),
+      pgstate_handler_{pgs_},
       prfstate_handler_{peripherals_},
       state_handler_{sections_},
       ver_handler_{infos_},

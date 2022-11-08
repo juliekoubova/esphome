@@ -51,6 +51,7 @@ bool ResponseHandlerPGState::invoke(StringView response) const {
       device->set_state(state);
     }
   }
+  return true;
 }
 
 ResponseHandlerPrfState::ResponseHandlerPrfState(const PeripheralDeviceVector &devices) : devices_{devices} {
