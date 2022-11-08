@@ -31,14 +31,17 @@ std::vector<std::string> UARTLineDevice::read_lines() {
   std::string::const_iterator line_begin = this->read_buffer_.cbegin();
   ESP_LOGD(TAG, "read_lines read_buffer=\"%s\"", this->read_buffer_.c_str());
 
+  std::string line;
   for (auto it = this->read_buffer_.cbegin(); it != this->read_buffer_.cend(); ++it) {
     if (*it == '\n') {
       continue;
-    }
-    if (*it == '\r') {
-      auto &line = lines.emplace_back(line_begin, it);
+    } else if (*it == '\r') {
       ESP_LOGD(TAG, "read_lines line=\"%s\"", line.c_str());
+      lines.push_back(line);
+      line.clear();
       line_begin = it + 1;
+    } else {
+      line.push_back(*it);
     }
   }
 
