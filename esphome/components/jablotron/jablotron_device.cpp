@@ -6,6 +6,9 @@ namespace jablotron {
 
 static const char TAG[] = "jablotron";
 
+const std::string &JablotronDevice::get_access_code() const { return this->access_code_; }
+void JablotronDevice::set_access_code(std::string access_code) { this->access_code_ = std::move(access_code); }
+
 void JablotronDevice::set_parent_jablotron(JablotronComponent *parent) {
   if (this->parent_ != parent) {
     this->parent_ = parent;

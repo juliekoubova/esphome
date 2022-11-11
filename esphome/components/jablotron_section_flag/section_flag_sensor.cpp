@@ -4,9 +4,7 @@
 namespace esphome {
 namespace jablotron_section_flag {
 
-void SectionFlagSensor::set_parent_jablotron(jablotron::JablotronComponent *parent) {
-  parent->register_section_flag(this);
-}
+void SectionFlagSensor::register_parent(jablotron::JablotronComponent &parent) { parent.register_section_flag(this); }
 
 void SectionFlagSensor::set_state(bool value) {
   if (this->last_value_ != value) {

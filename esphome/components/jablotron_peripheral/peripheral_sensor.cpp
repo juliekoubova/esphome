@@ -6,7 +6,7 @@ namespace jablotron_peripheral {
 
 using namespace jablotron;
 
-void PeripheralSensor::set_parent_jablotron(JablotronComponent *parent) { parent->register_peripheral(this); }
+void PeripheralSensor::register_parent(JablotronComponent &parent) { parent.register_peripheral(this); }
 
 void PeripheralSensor::set_state(bool value) {
   if (this->last_value_ != value) {

@@ -7,7 +7,7 @@ namespace jablotron_info {
 
 using namespace jablotron;
 
-void InfoSensor::set_parent_jablotron(JablotronComponent *parent) { parent->register_info(this); }
+void InfoSensor::register_parent(JablotronComponent &parent) { parent.register_info(this); }
 
 void InfoSensor::set_state(StringView value) { this->publish_state(value); }
 

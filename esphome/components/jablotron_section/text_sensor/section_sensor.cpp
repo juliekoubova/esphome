@@ -10,14 +10,14 @@ using namespace jablotron;
 
 static const char *const TAG = "jablotron_section";
 
+void SectionSensor::register_parent(JablotronComponent &parent) { parent.register_section(this); }
+
 void SectionSensor::set_state(StringView value) {
   if (value != this->last_value_) {
     this->last_value_ = std::string{value};
     this->publish_state(this->last_value_);
   }
 }
-
-void SectionSensor::set_parent_jablotron(JablotronComponent *parent) { parent->register_section(this); }
 
 }  // namespace jablotron_section
 }  // namespace esphome

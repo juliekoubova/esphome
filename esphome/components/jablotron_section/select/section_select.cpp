@@ -10,13 +10,18 @@ constexpr const char READY[] = "READY";
 constexpr const char TAG[] = "jablotron_section";
 
 void SectionSelect::control(std::string const &value) {
+  std::string request;
   if (value == ARMED) {
-    this->get_parent_jablotron()->queue_request_access_code("SET " + this->get_index_string());
+    request = "SET " + this->get_index_string();
   } else if (value == ARMED_PART) {
-    this->get_parent_jablotron()->queue_request_access_code("SETP " + this->get_index_string());
+    request = "SETP " + this->get_index_string();
   } else if (value == READY) {
-    this->get_parent_jablotron()->queue_request_access_code("UNSET " + this->get_index_string());
+    request = "UNSET " + this->get_index_string();
+  } else {
+    ESP_LOGE(TAG, "Invalid section state: '%s'", value.c_str());
+    return;
   }
+  this->get_parent_jablotron()->queue_request_access_code(std::move(request), this->get_access_code());
 }
 
 void SectionSelect::register_parent(jablotron::JablotronComponent &parent) { parent.register_section(this); }

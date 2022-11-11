@@ -7,7 +7,7 @@ namespace jablotron_section_flag {
 
 class SectionFlagSensor : public binary_sensor::BinarySensor, public jablotron::SectionFlagDevice {
  public:
-  void set_parent_jablotron(jablotron::JablotronComponent *parent) override;
+  void register_parent(jablotron::JablotronComponent &parent) override;
   void set_state(bool value) override;
 
  private:

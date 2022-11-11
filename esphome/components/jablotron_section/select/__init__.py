@@ -1,10 +1,11 @@
-import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import select
 from esphome.components.jablotron import (
-    CONF_INDEX,
+    ACCESS_CODE_SCHEMA,
     INDEX_SCHEMA,
     JABLOTRON_DEVICE_SCHEMA,
+    set_access_code,
+    set_index,
     register_jablotron_device,
 )
 from esphome.components.jablotron_section import jablotron_section_ns
@@ -16,15 +17,13 @@ DEPENDENCIES = ["jablotron"]
 CONFIG_SCHEMA = (
     select.SELECT_SCHEMA.extend(JABLOTRON_DEVICE_SCHEMA)
     .extend(INDEX_SCHEMA)
-    .extend(
-        {
-            cv.GenerateID(): cv.declare_id(SectionSelect),
-        }
-    )
+    .extend(ACCESS_CODE_SCHEMA)
+    .extend({cv.GenerateID(): cv.declare_id(SectionSelect)})
 )
 
 
 async def to_code(config):
     sel = await select.new_select(config, options=["READY", "ARMED_PART", "ARMED"])
-    cg.add(sel.set_index(config[CONF_INDEX]))
+    set_index(sel, config)
+    set_access_code(sel, config)
     await register_jablotron_device(sel, config)

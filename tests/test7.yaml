@@ -85,6 +85,7 @@ uart:
 jablotron:
   uart_id: uart9
   flow_control_pin: D4
+  access_code: 5*6789
 
 binary_sensor:
   - platform: jablotron_peripheral
@@ -112,3 +113,9 @@ switch:
     platform: jablotron_pg
     index: 1
     name: Windows open
+    access_code: 1*2345
+
+select:
+  - id: sel
+    platform: jablotron_section
+    index: 1

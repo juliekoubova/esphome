@@ -7,7 +7,7 @@ namespace jablotron {
 static const char *const TAG = "jablotron";
 
 JablotronComponent::JablotronComponent()
-    : PollingComponent(60'000),
+    : PollingComponent(60000),
       pgstate_handler_{pgs_},
       prfstate_handler_{peripherals_},
       state_handler_{sections_},
@@ -85,12 +85,9 @@ void JablotronComponent::queue_request(std::string request) {
 }
 
 void JablotronComponent::queue_request_access_code(std::string request, const std::string &access_code) {
-  ESP_LOGI(TAG, "Queueing request '" LOG_SECRET("%s") " %s'", access_code_.c_str(), request.c_str());
-  this->request_queue_.emplace_back(access_code + ' ' + std::move(request));
-}
-
-void JablotronComponent::queue_request_access_code(std::string request) {
-  this->queue_request_access_code(std::move(request), access_code_);
+  const std::string &actual_access_code = access_code.empty() ? this->access_code_ : access_code;
+  ESP_LOGI(TAG, "Queueing request '" LOG_SECRET("%s") " %s'", actual_access_code.c_str(), request.c_str());
+  this->request_queue_.emplace_back(actual_access_code + ' ' + std::move(request));
 }
 
 void JablotronComponent::send_request_(const std::string &request) {

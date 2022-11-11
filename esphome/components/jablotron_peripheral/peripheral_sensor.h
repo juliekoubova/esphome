@@ -7,7 +7,7 @@ namespace jablotron_peripheral {
 
 class PeripheralSensor : public binary_sensor::BinarySensor, public jablotron::PeripheralDevice {
  public:
-  void set_parent_jablotron(jablotron::JablotronComponent *parent) override;
+  void register_parent(jablotron::JablotronComponent &parent) override;
   void set_state(bool value) override;
 
  private:

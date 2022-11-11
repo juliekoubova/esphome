@@ -24,7 +24,6 @@ class JablotronComponent : public UARTLineDevice, public PollingComponent {
   void update() override;
 
   void queue_request(std::string request);
-  void queue_request_access_code(std::string request);
   void queue_request_access_code(std::string request, const std::string &access_code);
 
   void register_info(InfoDevice *device);
